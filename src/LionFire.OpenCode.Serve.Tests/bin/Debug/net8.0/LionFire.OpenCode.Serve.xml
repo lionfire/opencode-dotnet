@@ -1,0 +1,2436 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LionFire.OpenCode.Serve</name>
+    </assembly>
+    <members>
+        <member name="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeException">
+            <summary>
+            Base exception for all OpenCode SDK errors.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeException"/> class.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeException"/> class with a message.
+            </summary>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeException"/> class with a message and inner exception.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException">
+            <summary>
+            Exception thrown when the OpenCode server returns an error response.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException.StatusCode">
+            <summary>
+            Gets the HTTP status code from the response.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException.ErrorCode">
+            <summary>
+            Gets the error code from the API response, if available.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException.RequestId">
+            <summary>
+            Gets the request ID for troubleshooting, if available.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException.#ctor(System.String,System.Net.HttpStatusCode,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="statusCode">The HTTP status code.</param>
+            <param name="errorCode">The API error code, if available.</param>
+            <param name="requestId">The request ID, if available.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException.#ctor(System.String,System.Net.HttpStatusCode,System.Exception,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeApiException"/> class with an inner exception.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="statusCode">The HTTP status code.</param>
+            <param name="innerException">The inner exception.</param>
+            <param name="errorCode">The API error code, if available.</param>
+            <param name="requestId">The request ID, if available.</param>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">
+            <summary>
+            Exception thrown when a requested resource is not found (HTTP 404).
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException.ResourceType">
+            <summary>
+            Gets the type of resource that was not found.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException.ResourceId">
+            <summary>
+            Gets the ID of the resource that was not found.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="resourceType">The type of resource not found.</param>
+            <param name="resourceId">The ID of the resource not found.</param>
+            <param name="requestId">The request ID, if available.</param>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeConflictException">
+            <summary>
+            Exception thrown when an operation conflicts with the current state (HTTP 409).
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeConflictException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeConflictException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="requestId">The request ID, if available.</param>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeServerException">
+            <summary>
+            Exception thrown when the server returns a 5xx error.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeServerException.#ctor(System.String,System.Net.HttpStatusCode,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeServerException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="statusCode">The HTTP status code.</param>
+            <param name="requestId">The request ID, if available.</param>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeConnectionException">
+            <summary>
+            Exception thrown when the OpenCode server cannot be reached.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeConnectionException.BaseUrl">
+            <summary>
+            Gets the base URL that was being connected to.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeConnectionException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeConnectionException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="baseUrl">The base URL that was being connected to.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeConnectionException.ServerNotReachable(System.String,System.Exception)">
+            <summary>
+            Creates a connection exception with a helpful message about the server not being reachable.
+            </summary>
+            <param name="baseUrl">The base URL that was being connected to.</param>
+            <param name="innerException">The inner exception.</param>
+            <returns>A new <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeConnectionException"/> with a helpful message.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeTimeoutException">
+            <summary>
+            Exception thrown when an operation times out.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeTimeoutException.Timeout">
+            <summary>
+            Gets the timeout that was exceeded.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Exceptions.OpenCodeTimeoutException.Operation">
+            <summary>
+            Gets the operation that timed out.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeTimeoutException.#ctor(System.String,System.TimeSpan,System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeTimeoutException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="timeout">The timeout that was exceeded.</param>
+            <param name="operation">The operation that timed out.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Exceptions.OpenCodeTimeoutException.OperationTimedOut(System.String,System.TimeSpan,System.Exception)">
+            <summary>
+            Creates a timeout exception with a helpful message.
+            </summary>
+            <param name="operation">The operation that timed out.</param>
+            <param name="timeout">The timeout that was exceeded.</param>
+            <param name="innerException">The inner exception.</param>
+            <returns>A new <see cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeTimeoutException"/> with a helpful message.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Extensions.HttpClientBuilderExtensions">
+            <summary>
+            Extension methods for configuring the OpenCode HttpClient.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientBuilderExtensions.ConfigureRetry(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder,System.Action{LionFire.OpenCode.Serve.Extensions.RetryOptions})">
+             <summary>
+             Configures retry behavior using built-in .NET retry mechanisms.
+             For advanced scenarios, consider using Polly via AddPolicyHandler.
+             </summary>
+             <param name="builder">The HttpClient builder.</param>
+             <param name="configureRetry">Optional delegate to configure retry options.</param>
+             <returns>The builder for chaining.</returns>
+             <remarks>
+             For more advanced resilience patterns (circuit breaker, bulkhead, etc.),
+             install Microsoft.Extensions.Http.Polly and use AddPolicyHandler.
+             </remarks>
+             <example>
+             Using built-in retry:
+             <code>
+             services.AddOpenCodeClient()
+                 .ConfigureRetry(retry =>
+                 {
+                     retry.MaxRetryAttempts = 5;
+                     retry.RetryDelaySeconds = 3;
+                 });
+             </code>
+            
+             Using Polly (requires Microsoft.Extensions.Http.Polly):
+             <code>
+             services.AddOpenCodeClient()
+                 .AddPolicyHandler(Policy.Handle&lt;HttpRequestException&gt;()
+                     .WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
+             </code>
+             </example>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientBuilderExtensions.WithTimeout(Microsoft.Extensions.DependencyInjection.IHttpClientBuilder,System.TimeSpan)">
+            <summary>
+            Sets the default timeout for HTTP operations.
+            </summary>
+            <param name="builder">The HttpClient builder.</param>
+            <param name="timeout">The timeout duration.</param>
+            <returns>The builder for chaining.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Extensions.RetryOptions">
+            <summary>
+            Options for configuring retry behavior.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.RetryOptions.MaxRetryAttempts">
+            <summary>
+            Gets or sets the maximum number of retry attempts.
+            Defaults to 3.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.RetryOptions.RetryDelaySeconds">
+            <summary>
+            Gets or sets the initial delay between retries in seconds.
+            Defaults to 2 seconds.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.RetryOptions.UseExponentialBackoff">
+            <summary>
+            Gets or sets whether to use exponential backoff.
+            Defaults to true.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.RetryOptions.MaxJitterMilliseconds">
+            <summary>
+            Gets or sets the maximum jitter to add to retry delays in milliseconds.
+            Set to 0 to disable jitter.
+            Defaults to 1000ms.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions">
+            <summary>
+            Extension methods for <see cref="T:System.Net.Http.HttpClient"/> to simplify API operations.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.GetJsonAsync``1(System.Net.Http.HttpClient,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Sends a GET request and deserializes the response.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.PostJsonAsync``1(System.Net.Http.HttpClient,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request with JSON body and deserializes the response.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.PostJsonAsync(System.Net.Http.HttpClient,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request with JSON body, expecting no response body.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.PutJsonAsync``1(System.Net.Http.HttpClient,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends a PUT request with JSON body and deserializes the response.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.PatchJsonAsync``1(System.Net.Http.HttpClient,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends a PATCH request with JSON body and deserializes the response.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.DeleteAsync(System.Net.Http.HttpClient,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Sends a DELETE request.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.GetServerSentEventsAsync``1(System.Net.Http.HttpClient,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Sends a GET request for Server-Sent Events and returns an async enumerable of events.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.HttpClientExtensions.PostServerSentEventsAsync``1(System.Net.Http.HttpClient,System.String,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request and returns SSE stream.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Extensions.ServiceCollectionExtensions">
+            <summary>
+            Extension methods for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to register OpenCode client services.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Extensions.ServiceCollectionExtensions.HttpClientName">
+            <summary>
+            The name used for the HttpClient in IHttpClientFactory.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.ServiceCollectionExtensions.AddOpenCodeClient(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the OpenCode client to the service collection with default options.
+            </summary>
+            <param name="services">The service collection.</param>
+            <returns>An <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder"/> that can be used to further configure the HttpClient.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.ServiceCollectionExtensions.AddOpenCodeClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{LionFire.OpenCode.Serve.OpenCodeClientOptions})">
+            <summary>
+            Adds the OpenCode client to the service collection with configured options.
+            Uses <see cref="T:System.Net.Http.IHttpClientFactory"/> for proper HttpClient lifecycle management.
+            </summary>
+            <param name="services">The service collection.</param>
+            <param name="configureOptions">A delegate to configure the <see cref="T:LionFire.OpenCode.Serve.OpenCodeClientOptions"/>.</param>
+            <returns>An <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder"/> that can be used to further configure the HttpClient.</returns>
+            <example>
+            <code>
+            services.AddOpenCodeClient(options =>
+            {
+                options.BaseUrl = "http://localhost:9000";
+                options.MessageTimeout = TimeSpan.FromMinutes(10);
+            })
+            .AddPolicyHandler(myRetryPolicy); // Optional Polly integration
+            </code>
+            </example>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.ServiceCollectionExtensions.AddOpenCodeClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Net.Http.HttpClient,System.Action{LionFire.OpenCode.Serve.OpenCodeClientOptions})">
+            <summary>
+            Adds the OpenCode client using an existing HttpClient instance.
+            Use this when you want full control over the HttpClient lifecycle.
+            </summary>
+            <param name="services">The service collection.</param>
+            <param name="httpClient">The pre-configured HttpClient to use.</param>
+            <param name="configureOptions">Optional delegate to configure options.</param>
+            <returns>The service collection for chaining.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Extensions.StreamingExtensions">
+            <summary>
+            Extension methods for working with streaming responses.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.StreamingExtensions.Subscribe(System.Collections.Generic.IAsyncEnumerable{LionFire.OpenCode.Serve.Models.MessageUpdate},System.Action{System.String},System.Action,System.Action{System.Exception},System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to a streaming response using callbacks.
+            Useful for UI frameworks where event-based patterns are preferred.
+            </summary>
+            <param name="stream">The async enumerable stream.</param>
+            <param name="onUpdate">Callback for each update (delta content).</param>
+            <param name="onComplete">Optional callback when streaming completes.</param>
+            <param name="onError">Optional callback for errors.</param>
+            <param name="cancellationToken">A token to cancel the subscription.</param>
+            <returns>A task that completes when streaming finishes.</returns>
+            <example>
+            <code>
+            await client.SendMessageStreamingAsync(sessionId, "Hello")
+                .Subscribe(
+                    onUpdate: delta => Console.Write(delta),
+                    onComplete: () => Console.WriteLine("\nDone!"),
+                    onError: ex => Console.WriteLine($"Error: {ex.Message}"));
+            </code>
+            </example>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.StreamingExtensions.SubscribeWithProgress(System.Collections.Generic.IAsyncEnumerable{LionFire.OpenCode.Serve.Models.MessageUpdate},System.Action{LionFire.OpenCode.Serve.Extensions.StreamingProgress},System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to a streaming response with detailed progress information.
+            </summary>
+            <param name="stream">The async enumerable stream.</param>
+            <param name="onProgress">Callback for each update with full details.</param>
+            <param name="cancellationToken">A token to cancel the subscription.</param>
+            <returns>A task that completes when streaming finishes.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.StreamingExtensions.ToStringAsync(System.Collections.Generic.IAsyncEnumerable{LionFire.OpenCode.Serve.Models.MessageUpdate},System.Threading.CancellationToken)">
+            <summary>
+            Collects all streaming updates into a single string.
+            </summary>
+            <param name="stream">The async enumerable stream.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The complete response content.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Extensions.StreamingExtensions.ToListAsync(System.Collections.Generic.IAsyncEnumerable{LionFire.OpenCode.Serve.Models.MessageUpdate},System.Threading.CancellationToken)">
+            <summary>
+            Collects all streaming updates into a list of updates.
+            </summary>
+            <param name="stream">The async enumerable stream.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A list of all updates.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Extensions.StreamingProgress">
+            <summary>
+            Represents progress during streaming.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.StreamingProgress.MessageId">
+            <summary>
+            Gets the message ID being streamed.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.StreamingProgress.Delta">
+            <summary>
+            Gets the latest delta content.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.StreamingProgress.AccumulatedContent">
+            <summary>
+            Gets all content received so far.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.StreamingProgress.TokenCount">
+            <summary>
+            Gets the token count if available.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.StreamingProgress.UpdateCount">
+            <summary>
+            Gets the number of updates received.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Extensions.StreamingProgress.IsDone">
+            <summary>
+            Gets whether streaming is complete.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Internal.ApiEndpoints">
+            <summary>
+            Contains the API endpoint paths for the OpenCode server.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Internal.JsonOptions">
+            <summary>
+            Provides default JSON serialization options for the OpenCode client.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.JsonOptions.Default">
+            <summary>
+            Gets the default JSON serializer options for the OpenCode SDK (reflection-based).
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.JsonOptions.SourceGenerated">
+            <summary>
+            Gets the source-generated JSON serializer options for AOT compatibility.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.JsonOptions.Context">
+            <summary>
+            Gets the source-generated serializer context for direct use.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource">
+            <summary>
+            Provides an <see cref="T:System.Diagnostics.ActivitySource"/> for OpenCode client operations.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.Name">
+            <summary>
+            The name of the activity source.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.Version">
+            <summary>
+            The version of the activity source.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.Source">
+            <summary>
+            Gets the activity source for OpenCode operations.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.Activities">
+            <summary>
+            Activity names for various operations.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.Tags">
+            <summary>
+            Tag names for activity attributes.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.StartActivity(System.String)">
+            <summary>
+            Starts an activity for the specified operation.
+            </summary>
+            <param name="operationName">The name of the operation.</param>
+            <returns>The started activity, or null if tracing is not enabled.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.StartSessionActivity(System.String,System.String)">
+            <summary>
+            Starts an activity with a session ID tag.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.OpenCodeActivitySource.StartMessageActivity(System.String,System.String,System.String)">
+            <summary>
+            Starts an activity with session and message ID tags.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext">
+            <summary>
+            Source-generated JSON serializer context for AOT compatibility and improved performance.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Boolean">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.AgentPart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ApplyChangesRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ApplyChangesResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ApproveToolRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.CommandResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.CreateSessionRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ExecuteCommandRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.FileChange">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.FileChangeArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.FileChangeError">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.FileContent">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.FileOperation">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.FilePart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ForkSessionRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.HealthCheckResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Message">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.MessageArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.MessagePart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.MessagePartArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.MessageRole">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.MessageUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Model">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ModelArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.OpenCodeConfig">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.OpenCodeFileInfo">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.OpenCodeFileInfoArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.PendingToolExecution">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Provider">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ProviderArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.SearchFilesRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.SearchFilesResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.SendMessageRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Session">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.SessionArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.SessionStatus">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.TextPart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Tool">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ToolArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ToolPermission">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ToolResultPart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ToolUsePart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.UpdateToolPermissionRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.DictionaryStringJsonElement">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.IReadOnlyListFileChange">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.IReadOnlyListFileChangeError">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.IReadOnlyListMessagePart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.IReadOnlyListModel">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.IReadOnlyListOpenCodeFileInfo">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.IReadOnlyListProvider">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.IReadOnlyListString">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ListMessage">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ListMessagePart">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ListModel">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ListOpenCodeFileInfo">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ListProvider">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ListSession">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.ListTool">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.DateTimeOffset">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.NullableDateTimeOffset">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.JsonElement">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Int32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.NullableInt32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Int64">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.NullableInt64">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Object">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.String">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.Default">
+            <summary>
+            The default <see cref="T:System.Text.Json.Serialization.JsonSerializerContext"/> associated with a default <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.GeneratedSerializerOptions">
+            <summary>
+            The source-generated options associated with this context.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.OpenCodeSerializerContext.GetTypeInfo(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Internal.RetryHelper">
+            <summary>
+            Helper for implementing retry logic with exponential backoff.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.RetryHelper.ExecuteWithRetryAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}},LionFire.OpenCode.Serve.OpenCodeClientOptions,Microsoft.Extensions.Logging.ILogger,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes an async operation with retry logic.
+            </summary>
+            <typeparam name="T">The return type of the operation.</typeparam>
+            <param name="operation">The operation to execute.</param>
+            <param name="options">The client options containing retry settings.</param>
+            <param name="logger">Optional logger for retry attempts.</param>
+            <param name="operationName">Name of the operation for logging.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.RetryHelper.ExecuteWithRetryAsync(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task},LionFire.OpenCode.Serve.OpenCodeClientOptions,Microsoft.Extensions.Logging.ILogger,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes an async operation with retry logic (no return value).
+            </summary>
+            <param name="operation">The operation to execute.</param>
+            <param name="options">The client options containing retry settings.</param>
+            <param name="logger">Optional logger for retry attempts.</param>
+            <param name="operationName">Name of the operation for logging.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Internal.RetryHelper.ShouldRetry(System.Exception)">
+            <summary>
+            Determines if an exception is retryable.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.IOpenCodeClient">
+            <summary>
+            Interface for the OpenCode client, providing access to all OpenCode server operations.
+            </summary>
+            <remarks>
+            <para>
+            This interface defines the contract for communicating with an OpenCode server
+            running locally via <c>opencode serve</c>. It provides session management,
+            message handling, tool operations, file access, and configuration retrieval.
+            </para>
+            <para>
+            Implementations should be thread-safe and support concurrent operations.
+            </para>
+            </remarks>
+            <example>
+            Basic usage:
+            <code>
+            await using var client = new OpenCodeClient();
+            var session = await client.CreateSessionAsync();
+            var response = await client.SendMessageAsync(session.Id, "Hello, OpenCode!");
+            </code>
+            </example>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.PingAsync(System.Threading.CancellationToken)">
+            <summary>
+            Checks if the OpenCode server is reachable and healthy.
+            </summary>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A <see cref="T:LionFire.OpenCode.Serve.Models.HealthCheckResult"/> if the server is healthy.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeConnectionException">Thrown when the server cannot be reached.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.CreateSessionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new session.
+            </summary>
+            <param name="directory">Optional working directory for the session.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The created <see cref="T:LionFire.OpenCode.Serve.Models.Session"/>.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.CreateSessionAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new session with additional options.
+            </summary>
+            <param name="directory">Optional working directory for the session.</param>
+            <param name="parentId">Optional parent session ID to fork from.</param>
+            <param name="title">Optional title for the session.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The created <see cref="T:LionFire.OpenCode.Serve.Models.Session"/>.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetSessionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets a session by its ID.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.Session"/> if found.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.ListSessionsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Lists all sessions.
+            </summary>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A list of all <see cref="T:LionFire.OpenCode.Serve.Models.Session"/> instances.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.DeleteSessionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a session.
+            </summary>
+            <param name="sessionId">The session ID to delete.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.ForkSessionAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Forks a session at a specific message, creating a new session with messages up to that point.
+            </summary>
+            <param name="sessionId">The session ID to fork.</param>
+            <param name="messageId">The message ID to fork at.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The newly forked <see cref="T:LionFire.OpenCode.Serve.Models.Session"/>.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session or message is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.AbortSessionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Aborts a running session.
+            </summary>
+            <param name="sessionId">The session ID to abort.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.ShareSessionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Shares a session, generating a shareable token.
+            </summary>
+            <param name="sessionId">The session ID to share.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.Session"/> with the share token populated.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.UnshareSessionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Unshares a session, revoking the share token.
+            </summary>
+            <param name="sessionId">The session ID to unshare.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.CreateSessionScopeAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a session scope that automatically deletes the session when disposed.
+            </summary>
+            <param name="directory">Optional working directory for the session.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>An <see cref="T:LionFire.OpenCode.Serve.ISessionScope"/> that manages the session lifecycle.</returns>
+            <example>
+            <code>
+            await using var scope = await client.CreateSessionScopeAsync();
+            // Use scope.Session...
+            // Session is automatically deleted when scope is disposed
+            </code>
+            </example>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.SendMessageAsync(System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.MessagePart},System.Threading.CancellationToken)">
+            <summary>
+            Sends a message to a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="parts">The message parts to send.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The assistant's response <see cref="T:LionFire.OpenCode.Serve.Models.Message"/>.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.SendMessageAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Sends a text message to a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="text">The text message to send.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The assistant's response <see cref="T:LionFire.OpenCode.Serve.Models.Message"/>.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.SendMessageStreamingAsync(System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.MessagePart},System.Threading.CancellationToken)">
+            <summary>
+            Sends a message to a session and streams the response.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="parts">The message parts to send.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>An async enumerable of <see cref="T:LionFire.OpenCode.Serve.Models.MessageUpdate"/> for incremental updates.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.SendMessageStreamingAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Sends a text message to a session and streams the response.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="text">The text message to send.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>An async enumerable of <see cref="T:LionFire.OpenCode.Serve.Models.MessageUpdate"/> for incremental updates.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetMessagesAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets all messages in a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A list of all <see cref="T:LionFire.OpenCode.Serve.Models.Message"/> instances in the session.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetMessageAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets a specific message from a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="messageId">The message ID.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.Message"/> if found.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session or message is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetToolsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets all available tools.
+            </summary>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A list of all available <see cref="T:LionFire.OpenCode.Serve.Models.Tool"/> instances.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetToolAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets a specific tool by ID.
+            </summary>
+            <param name="toolId">The tool ID.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.Tool"/> if found.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the tool is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.ApproveToolAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Approves a pending tool execution in a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="toolId">The tool ID to approve.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session or pending tool is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.DenyToolAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Denies a pending tool execution in a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="toolId">The tool ID to deny.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session or pending tool is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.UpdateToolPermissionsAsync(System.String,System.String,LionFire.OpenCode.Serve.Models.ToolPermission,System.Threading.CancellationToken)">
+            <summary>
+            Updates the permission level for a tool in a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="toolId">The tool ID.</param>
+            <param name="permission">The new permission level.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session or tool is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.ListFilesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Lists files in a directory within a session's context.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="path">The path to list. Defaults to the session's working directory.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A list of <see cref="T:LionFire.OpenCode.Serve.Models.OpenCodeFileInfo"/> entries.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetFileContentAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the content of a file within a session's context.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="path">The path to the file.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.FileContent"/> of the file.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session or file is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.SearchFilesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Searches for files within a session's context.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="query">The search query.</param>
+            <param name="path">Optional path to search within.</param>
+            <param name="maxResults">Maximum number of results to return.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.SearchFilesResult"/> containing matching files.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.ApplyChangesAsync(System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.FileChange},System.Threading.CancellationToken)">
+            <summary>
+            Applies file changes within a session's context.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="changes">The changes to apply.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.ApplyChangesResult"/> indicating which changes were applied.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.ExecuteCommandAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes a slash command in a session.
+            </summary>
+            <param name="sessionId">The session ID.</param>
+            <param name="command">The command to execute (e.g., "/help", "/clear").</param>
+            <param name="arguments">Optional arguments for the command.</param>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.CommandResult"/> from the command execution.</returns>
+            <exception cref="T:LionFire.OpenCode.Serve.Exceptions.OpenCodeNotFoundException">Thrown when the session is not found.</exception>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetConfigAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets the OpenCode server configuration.
+            </summary>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>The <see cref="T:LionFire.OpenCode.Serve.Models.OpenCodeConfig"/> of the server.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetProvidersAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets all available AI providers.
+            </summary>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A list of all <see cref="T:LionFire.OpenCode.Serve.Models.Provider"/> instances.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.IOpenCodeClient.GetModelsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets all available AI models.
+            </summary>
+            <param name="cancellationToken">A token to cancel the operation.</param>
+            <returns>A list of all <see cref="T:LionFire.OpenCode.Serve.Models.Model"/> instances.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.ISessionScope">
+            <summary>
+            A session scope that automatically deletes the session when disposed.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.ISessionScope.Session">
+            <summary>
+            Gets the session managed by this scope.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.ISessionScope.SessionId">
+            <summary>
+            Gets the session ID for convenience.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ExecuteCommandRequest">
+            <summary>
+            Request to execute a slash command.
+            </summary>
+            <param name="Command">The command to execute (e.g., "/help", "/clear").</param>
+            <param name="Arguments">Optional arguments for the command.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ExecuteCommandRequest.#ctor(System.String,System.String)">
+            <summary>
+            Request to execute a slash command.
+            </summary>
+            <param name="Command">The command to execute (e.g., "/help", "/clear").</param>
+            <param name="Arguments">Optional arguments for the command.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ExecuteCommandRequest.Command">
+            <summary>The command to execute (e.g., "/help", "/clear").</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ExecuteCommandRequest.Arguments">
+            <summary>Optional arguments for the command.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.CommandResult">
+            <summary>
+            Result from executing a command.
+            </summary>
+            <param name="Output">The standard output from the command.</param>
+            <param name="Error">Any error output from the command.</param>
+            <param name="ExitCode">The exit code (0 for success).</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.CommandResult.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Result from executing a command.
+            </summary>
+            <param name="Output">The standard output from the command.</param>
+            <param name="Error">Any error output from the command.</param>
+            <param name="ExitCode">The exit code (0 for success).</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.CommandResult.Output">
+            <summary>The standard output from the command.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.CommandResult.Error">
+            <summary>Any error output from the command.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.CommandResult.ExitCode">
+            <summary>The exit code (0 for success).</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.OpenCodeConfig">
+            <summary>
+            Represents the OpenCode server configuration.
+            </summary>
+            <param name="Username">The current username.</param>
+            <param name="Version">The version of the OpenCode server (if available).</param>
+            <param name="Providers">The available AI providers.</param>
+            <param name="DefaultProvider">The default provider ID.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.OpenCodeConfig.#ctor(System.String,System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.Provider},System.String)">
+            <summary>
+            Represents the OpenCode server configuration.
+            </summary>
+            <param name="Username">The current username.</param>
+            <param name="Version">The version of the OpenCode server (if available).</param>
+            <param name="Providers">The available AI providers.</param>
+            <param name="DefaultProvider">The default provider ID.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeConfig.Username">
+            <summary>The current username.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeConfig.Version">
+            <summary>The version of the OpenCode server (if available).</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeConfig.Providers">
+            <summary>The available AI providers.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeConfig.DefaultProvider">
+            <summary>The default provider ID.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeConfig.ExtensionData">
+            <summary>
+            Additional properties not explicitly mapped.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.Provider">
+            <summary>
+            Represents an AI provider configuration.
+            </summary>
+            <param name="Id">The unique identifier of the provider.</param>
+            <param name="Name">The display name of the provider.</param>
+            <param name="Models">The models available from this provider.</param>
+            <param name="Available">Whether the provider is currently available.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.Provider.#ctor(System.String,System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.Model},System.Boolean)">
+            <summary>
+            Represents an AI provider configuration.
+            </summary>
+            <param name="Id">The unique identifier of the provider.</param>
+            <param name="Name">The display name of the provider.</param>
+            <param name="Models">The models available from this provider.</param>
+            <param name="Available">Whether the provider is currently available.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Provider.Id">
+            <summary>The unique identifier of the provider.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Provider.Name">
+            <summary>The display name of the provider.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Provider.Models">
+            <summary>The models available from this provider.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Provider.Available">
+            <summary>Whether the provider is currently available.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.Model">
+            <summary>
+            Represents an AI model.
+            </summary>
+            <param name="Id">The unique identifier of the model.</param>
+            <param name="Name">The display name of the model.</param>
+            <param name="Provider">The provider ID this model belongs to.</param>
+            <param name="MaxTokens">The maximum context window size in tokens.</param>
+            <param name="SupportsFunctions">Whether the model supports function calling.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.Model.#ctor(System.String,System.String,System.String,System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            Represents an AI model.
+            </summary>
+            <param name="Id">The unique identifier of the model.</param>
+            <param name="Name">The display name of the model.</param>
+            <param name="Provider">The provider ID this model belongs to.</param>
+            <param name="MaxTokens">The maximum context window size in tokens.</param>
+            <param name="SupportsFunctions">Whether the model supports function calling.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Model.Id">
+            <summary>The unique identifier of the model.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Model.Name">
+            <summary>The display name of the model.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Model.Provider">
+            <summary>The provider ID this model belongs to.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Model.MaxTokens">
+            <summary>The maximum context window size in tokens.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Model.SupportsFunctions">
+            <summary>Whether the model supports function calling.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.HealthCheckResult">
+            <summary>
+            Result from a health check (ping) operation.
+            </summary>
+            <param name="Status">The server status.</param>
+            <param name="Version">The server version.</param>
+            <param name="Uptime">The server uptime in seconds.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.HealthCheckResult.#ctor(System.String,System.String,System.Nullable{System.Int64})">
+            <summary>
+            Result from a health check (ping) operation.
+            </summary>
+            <param name="Status">The server status.</param>
+            <param name="Version">The server version.</param>
+            <param name="Uptime">The server uptime in seconds.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.HealthCheckResult.Status">
+            <summary>The server status.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.HealthCheckResult.Version">
+            <summary>The server version.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.HealthCheckResult.Uptime">
+            <summary>The server uptime in seconds.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.OpenCodeFileInfo">
+            <summary>
+            Represents information about a file in the OpenCode context.
+            Named <c>OpenCodeFileInfo</c> to avoid conflict with <see cref="T:System.IO.FileInfo"/>.
+            </summary>
+            <param name="Path">The relative path of the file.</param>
+            <param name="Size">The size of the file in bytes.</param>
+            <param name="IsDirectory">Whether this entry is a directory.</param>
+            <param name="LastModified">When the file was last modified.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.OpenCodeFileInfo.#ctor(System.String,System.Int64,System.Boolean,System.Nullable{System.DateTimeOffset})">
+            <summary>
+            Represents information about a file in the OpenCode context.
+            Named <c>OpenCodeFileInfo</c> to avoid conflict with <see cref="T:System.IO.FileInfo"/>.
+            </summary>
+            <param name="Path">The relative path of the file.</param>
+            <param name="Size">The size of the file in bytes.</param>
+            <param name="IsDirectory">Whether this entry is a directory.</param>
+            <param name="LastModified">When the file was last modified.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeFileInfo.Path">
+            <summary>The relative path of the file.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeFileInfo.Size">
+            <summary>The size of the file in bytes.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeFileInfo.IsDirectory">
+            <summary>Whether this entry is a directory.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.OpenCodeFileInfo.LastModified">
+            <summary>When the file was last modified.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.FileContent">
+            <summary>
+            Represents the content of a file.
+            </summary>
+            <param name="Path">The path of the file.</param>
+            <param name="Content">The content of the file.</param>
+            <param name="Encoding">The encoding used for the content.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.FileContent.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Represents the content of a file.
+            </summary>
+            <param name="Path">The path of the file.</param>
+            <param name="Content">The content of the file.</param>
+            <param name="Encoding">The encoding used for the content.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileContent.Path">
+            <summary>The path of the file.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileContent.Content">
+            <summary>The content of the file.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileContent.Encoding">
+            <summary>The encoding used for the content.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.SearchFilesRequest">
+            <summary>
+            Request to search for files.
+            </summary>
+            <param name="Query">The search query.</param>
+            <param name="Path">Optional path to search within.</param>
+            <param name="MaxResults">Maximum number of results to return.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.SearchFilesRequest.#ctor(System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Request to search for files.
+            </summary>
+            <param name="Query">The search query.</param>
+            <param name="Path">Optional path to search within.</param>
+            <param name="MaxResults">Maximum number of results to return.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SearchFilesRequest.Query">
+            <summary>The search query.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SearchFilesRequest.Path">
+            <summary>Optional path to search within.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SearchFilesRequest.MaxResults">
+            <summary>Maximum number of results to return.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.SearchFilesResult">
+            <summary>
+            Result from a file search.
+            </summary>
+            <param name="Files">The files matching the search.</param>
+            <param name="TotalCount">The total number of matches.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.SearchFilesResult.#ctor(System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.OpenCodeFileInfo},System.Int32)">
+            <summary>
+            Result from a file search.
+            </summary>
+            <param name="Files">The files matching the search.</param>
+            <param name="TotalCount">The total number of matches.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SearchFilesResult.Files">
+            <summary>The files matching the search.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SearchFilesResult.TotalCount">
+            <summary>The total number of matches.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.FileChange">
+            <summary>
+            Represents a file change to apply.
+            </summary>
+            <param name="Path">The path of the file to change.</param>
+            <param name="Content">The new content for the file.</param>
+            <param name="Operation">The type of operation (create, update, delete).</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.FileChange.#ctor(System.String,System.String,LionFire.OpenCode.Serve.Models.FileOperation)">
+            <summary>
+            Represents a file change to apply.
+            </summary>
+            <param name="Path">The path of the file to change.</param>
+            <param name="Content">The new content for the file.</param>
+            <param name="Operation">The type of operation (create, update, delete).</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileChange.Path">
+            <summary>The path of the file to change.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileChange.Content">
+            <summary>The new content for the file.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileChange.Operation">
+            <summary>The type of operation (create, update, delete).</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.FileOperation">
+            <summary>
+            The type of file operation.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.FileOperation.Create">
+            <summary>
+            Create a new file.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.FileOperation.Update">
+            <summary>
+            Update an existing file.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.FileOperation.Delete">
+            <summary>
+            Delete a file.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ApplyChangesRequest">
+            <summary>
+            Request to apply file changes.
+            </summary>
+            <param name="Changes">The changes to apply.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ApplyChangesRequest.#ctor(System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.FileChange})">
+            <summary>
+            Request to apply file changes.
+            </summary>
+            <param name="Changes">The changes to apply.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ApplyChangesRequest.Changes">
+            <summary>The changes to apply.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ApplyChangesResult">
+            <summary>
+            Result from applying file changes.
+            </summary>
+            <param name="Applied">The changes that were applied successfully.</param>
+            <param name="Errors">Any errors that occurred.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ApplyChangesResult.#ctor(System.Collections.Generic.IReadOnlyList{System.String},System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.FileChangeError})">
+            <summary>
+            Result from applying file changes.
+            </summary>
+            <param name="Applied">The changes that were applied successfully.</param>
+            <param name="Errors">Any errors that occurred.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ApplyChangesResult.Applied">
+            <summary>The changes that were applied successfully.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ApplyChangesResult.Errors">
+            <summary>Any errors that occurred.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.FileChangeError">
+            <summary>
+            Represents an error applying a file change.
+            </summary>
+            <param name="Path">The path of the file that failed.</param>
+            <param name="Error">The error message.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.FileChangeError.#ctor(System.String,System.String)">
+            <summary>
+            Represents an error applying a file change.
+            </summary>
+            <param name="Path">The path of the file that failed.</param>
+            <param name="Error">The error message.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileChangeError.Path">
+            <summary>The path of the file that failed.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FileChangeError.Error">
+            <summary>The error message.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.MessageRole">
+            <summary>
+            Represents the role of a message in a conversation.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.MessageRole.System">
+            <summary>
+            System message providing context or instructions.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.MessageRole.User">
+            <summary>
+            Message from the user.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.MessageRole.Assistant">
+            <summary>
+            Message from the AI assistant.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.MessageRole.Tool">
+            <summary>
+            Message from a tool execution.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.MessagePart">
+            <summary>
+            Base class for message parts.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.TextPart">
+            <summary>
+            A text content part of a message.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.TextPart.Text">
+            <summary>
+            Gets or sets the text content.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.TextPart.#ctor(System.String)">
+            <summary>
+            Creates a new TextPart with the specified text.
+            </summary>
+            <param name="text">The text content.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.TextPart.#ctor">
+            <summary>
+            Creates a new TextPart. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.FilePart">
+            <summary>
+            A file reference part of a message.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FilePart.FilePath">
+            <summary>
+            Gets or sets the path to the file.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.FilePart.Content">
+            <summary>
+            Gets or sets the optional file content if inline.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.FilePart.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new FilePart with the specified path and optional content.
+            </summary>
+            <param name="filePath">The path to the file.</param>
+            <param name="content">Optional file content if inline.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.FilePart.#ctor">
+            <summary>
+            Creates a new FilePart. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.AgentPart">
+            <summary>
+            An agent-specific content part.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.AgentPart.AgentId">
+            <summary>
+            Gets or sets the agent identifier.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.AgentPart.Content">
+            <summary>
+            Gets or sets the content from the agent.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.AgentPart.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new AgentPart with the specified agent ID and content.
+            </summary>
+            <param name="agentId">The agent identifier.</param>
+            <param name="content">The content from the agent.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.AgentPart.#ctor">
+            <summary>
+            Creates a new AgentPart. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ToolUsePart">
+            <summary>
+            A tool use request part.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ToolUsePart.ToolId">
+            <summary>
+            Gets or sets the ID of the tool being used.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ToolUsePart.ToolName">
+            <summary>
+            Gets or sets the name of the tool.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ToolUsePart.Input">
+            <summary>
+            Gets or sets the input parameters for the tool.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ToolUsePart.#ctor(System.String,System.String,System.Object)">
+            <summary>
+            Creates a new ToolUsePart with the specified parameters.
+            </summary>
+            <param name="toolId">The ID of the tool being used.</param>
+            <param name="toolName">The name of the tool.</param>
+            <param name="input">Optional input parameters for the tool.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ToolUsePart.#ctor">
+            <summary>
+            Creates a new ToolUsePart. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ToolResultPart">
+            <summary>
+            A tool execution result part.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ToolResultPart.ToolId">
+            <summary>
+            Gets or sets the ID of the tool that was used.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ToolResultPart.Output">
+            <summary>
+            Gets or sets the output from the tool execution.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ToolResultPart.IsError">
+            <summary>
+            Gets or sets whether the tool execution resulted in an error.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ToolResultPart.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new ToolResultPart with the specified parameters.
+            </summary>
+            <param name="toolId">The ID of the tool that was used.</param>
+            <param name="output">The output from the tool execution.</param>
+            <param name="isError">Whether the tool execution resulted in an error.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ToolResultPart.#ctor">
+            <summary>
+            Creates a new ToolResultPart. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.Message">
+            <summary>
+            Represents a message in an OpenCode session.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Message.Id">
+            <summary>
+            Gets or sets the unique identifier of the message.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Message.SessionId">
+            <summary>
+            Gets or sets the session this message belongs to.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Message.Role">
+            <summary>
+            Gets or sets the role of the message sender.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Message.Parts">
+            <summary>
+            Gets or sets the parts that make up this message.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Message.CreatedAt">
+            <summary>
+            Gets or sets when the message was created.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Message.TokenCount">
+            <summary>
+            Gets or sets the optional token count for this message.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.Message.#ctor(System.String,System.String,LionFire.OpenCode.Serve.Models.MessageRole,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.MessagePart},System.DateTimeOffset,System.Nullable{System.Int32})">
+            <summary>
+            Creates a new Message with the specified parameters.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.Message.#ctor">
+            <summary>
+            Creates a new Message. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.SendMessageRequest">
+            <summary>
+            Request to send a message to a session.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SendMessageRequest.Parts">
+            <summary>
+            Gets or sets the message parts to send.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.SendMessageRequest.#ctor(System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.MessagePart})">
+            <summary>
+            Creates a new SendMessageRequest with the specified parts.
+            </summary>
+            <param name="parts">The message parts to send.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.SendMessageRequest.#ctor">
+            <summary>
+            Creates a new SendMessageRequest. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.MessageUpdate">
+            <summary>
+            Represents an incremental update during message streaming.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.MessageUpdate.MessageId">
+            <summary>
+            Gets or sets the ID of the message being streamed.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.MessageUpdate.Delta">
+            <summary>
+            Gets or sets the incremental content update.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.MessageUpdate.Done">
+            <summary>
+            Gets or sets whether the message is complete.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.MessageUpdate.TokenCount">
+            <summary>
+            Gets or sets the running token count if available.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.MessageUpdate.#ctor(System.String,System.String,System.Boolean,System.Nullable{System.Int32})">
+            <summary>
+            Creates a new MessageUpdate with the specified parameters.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.MessageUpdate.#ctor">
+            <summary>
+            Creates a new MessageUpdate. Required for JSON deserialization.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.PaginationOptions">
+            <summary>
+            Options for paginating results.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PaginationOptions.Skip">
+            <summary>
+            Gets or sets the number of items to skip.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PaginationOptions.Take">
+            <summary>
+            Gets or sets the maximum number of items to return.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.PaginationOptions.Create(System.Int32,System.Int32)">
+            <summary>
+            Creates pagination options for skipping and taking.
+            </summary>
+            <param name="skip">Number of items to skip.</param>
+            <param name="take">Maximum number of items to return.</param>
+            <returns>A new <see cref="T:LionFire.OpenCode.Serve.Models.PaginationOptions"/> instance.</returns>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.PaginationOptions.Page(System.Int32,System.Int32)">
+            <summary>
+            Creates pagination options for the specified page (1-indexed).
+            </summary>
+            <param name="page">The page number (1-indexed).</param>
+            <param name="pageSize">The number of items per page.</param>
+            <returns>A new <see cref="T:LionFire.OpenCode.Serve.Models.PaginationOptions"/> instance.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.PaginatedResult`1">
+            <summary>
+            A paginated result set.
+            </summary>
+            <typeparam name="T">The type of items in the result.</typeparam>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PaginatedResult`1.Items">
+            <summary>
+            Gets or sets the items in this page.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PaginatedResult`1.TotalCount">
+            <summary>
+            Gets or sets the total count of items across all pages.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PaginatedResult`1.Skip">
+            <summary>
+            Gets or sets the number of items skipped.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PaginatedResult`1.Take">
+            <summary>
+            Gets or sets the maximum number of items requested.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PaginatedResult`1.HasMore">
+            <summary>
+            Gets whether there are more items available.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.PaginatedResult`1.GetPage(System.Int32)">
+            <summary>
+            Gets the current page number (1-indexed).
+            </summary>
+            <param name="pageSize">The page size used.</param>
+            <returns>The current page number.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.SessionFilterOptions">
+            <summary>
+            Options for filtering sessions.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SessionFilterOptions.Status">
+            <summary>
+            Gets or sets the status to filter by.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SessionFilterOptions.CreatedAfter">
+            <summary>
+            Gets or sets the minimum creation date.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SessionFilterOptions.CreatedBefore">
+            <summary>
+            Gets or sets the maximum creation date.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.SessionFilterOptions.Directory">
+            <summary>
+            Gets or sets the directory to filter by.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.SessionFilterOptions.ToQueryParameters">
+            <summary>
+            Converts to query string parameters.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.SessionStatus">
+            <summary>
+            Represents the status of an OpenCode session.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.SessionStatus.Active">
+            <summary>
+            The session is active and can receive messages.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.SessionStatus.Aborted">
+            <summary>
+            The session has been aborted.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.SessionStatus.Completed">
+            <summary>
+            The session has completed normally.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.Session">
+            <summary>
+            Represents an OpenCode session.
+            </summary>
+            <param name="Id">The unique identifier of the session.</param>
+            <param name="CreatedAt">When the session was created.</param>
+            <param name="UpdatedAt">When the session was last updated.</param>
+            <param name="Status">The current status of the session.</param>
+            <param name="SharedToken">Optional token for sharing the session.</param>
+            <param name="Directory">Optional working directory for the session.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.Session.#ctor(System.String,System.DateTimeOffset,System.DateTimeOffset,LionFire.OpenCode.Serve.Models.SessionStatus,System.String,System.String)">
+            <summary>
+            Represents an OpenCode session.
+            </summary>
+            <param name="Id">The unique identifier of the session.</param>
+            <param name="CreatedAt">When the session was created.</param>
+            <param name="UpdatedAt">When the session was last updated.</param>
+            <param name="Status">The current status of the session.</param>
+            <param name="SharedToken">Optional token for sharing the session.</param>
+            <param name="Directory">Optional working directory for the session.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Session.Id">
+            <summary>The unique identifier of the session.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Session.CreatedAt">
+            <summary>When the session was created.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Session.UpdatedAt">
+            <summary>When the session was last updated.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Session.Status">
+            <summary>The current status of the session.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Session.SharedToken">
+            <summary>Optional token for sharing the session.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Session.Directory">
+            <summary>Optional working directory for the session.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.CreateSessionRequest">
+            <summary>
+            Request to create a new session.
+            </summary>
+            <param name="ParentId">Optional parent session ID to fork from.</param>
+            <param name="Title">Optional title for the session.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.CreateSessionRequest.#ctor(System.String,System.String)">
+            <summary>
+            Request to create a new session.
+            </summary>
+            <param name="ParentId">Optional parent session ID to fork from.</param>
+            <param name="Title">Optional title for the session.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.CreateSessionRequest.ParentId">
+            <summary>Optional parent session ID to fork from.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.CreateSessionRequest.Title">
+            <summary>Optional title for the session.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ForkSessionRequest">
+            <summary>
+            Request to fork an existing session.
+            </summary>
+            <param name="MessageId">The message ID to fork from (creates a new session with messages up to this point).</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ForkSessionRequest.#ctor(System.String)">
+            <summary>
+            Request to fork an existing session.
+            </summary>
+            <param name="MessageId">The message ID to fork from (creates a new session with messages up to this point).</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ForkSessionRequest.MessageId">
+            <summary>The message ID to fork from (creates a new session with messages up to this point).</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ToolPermission">
+            <summary>
+            Represents the permission level for a tool.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.ToolPermission.Allowed">
+            <summary>
+            Tool usage is allowed without approval.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.ToolPermission.Denied">
+            <summary>
+            Tool usage is denied.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.Models.ToolPermission.RequiresApproval">
+            <summary>
+            Tool usage requires explicit approval for each use.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.Tool">
+            <summary>
+            Represents a tool available in OpenCode.
+            </summary>
+            <param name="Id">The unique identifier of the tool.</param>
+            <param name="Name">The display name of the tool.</param>
+            <param name="Description">A description of what the tool does.</param>
+            <param name="Parameters">JSON schema describing the tool's parameters.</param>
+            <param name="RequiresApproval">Whether the tool requires user approval before execution.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.Tool.#ctor(System.String,System.String,System.String,System.Object,System.Boolean)">
+            <summary>
+            Represents a tool available in OpenCode.
+            </summary>
+            <param name="Id">The unique identifier of the tool.</param>
+            <param name="Name">The display name of the tool.</param>
+            <param name="Description">A description of what the tool does.</param>
+            <param name="Parameters">JSON schema describing the tool's parameters.</param>
+            <param name="RequiresApproval">Whether the tool requires user approval before execution.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Tool.Id">
+            <summary>The unique identifier of the tool.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Tool.Name">
+            <summary>The display name of the tool.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Tool.Description">
+            <summary>A description of what the tool does.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Tool.Parameters">
+            <summary>JSON schema describing the tool's parameters.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.Tool.RequiresApproval">
+            <summary>Whether the tool requires user approval before execution.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.ApproveToolRequest">
+            <summary>
+            Request to approve a tool execution.
+            </summary>
+            <param name="ToolId">The ID of the tool to approve.</param>
+            <param name="Approved">Whether the tool use is approved.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.ApproveToolRequest.#ctor(System.String,System.Boolean)">
+            <summary>
+            Request to approve a tool execution.
+            </summary>
+            <param name="ToolId">The ID of the tool to approve.</param>
+            <param name="Approved">Whether the tool use is approved.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ApproveToolRequest.ToolId">
+            <summary>The ID of the tool to approve.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.ApproveToolRequest.Approved">
+            <summary>Whether the tool use is approved.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.UpdateToolPermissionRequest">
+            <summary>
+            Request to update tool permissions.
+            </summary>
+            <param name="Permission">The new permission level for the tool.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.UpdateToolPermissionRequest.#ctor(LionFire.OpenCode.Serve.Models.ToolPermission)">
+            <summary>
+            Request to update tool permissions.
+            </summary>
+            <param name="Permission">The new permission level for the tool.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.UpdateToolPermissionRequest.Permission">
+            <summary>The new permission level for the tool.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.Models.PendingToolExecution">
+            <summary>
+            Represents a pending tool execution that requires approval.
+            </summary>
+            <param name="Id">The unique ID of this pending execution.</param>
+            <param name="SessionId">The session requesting the tool execution.</param>
+            <param name="ToolId">The ID of the tool to be executed.</param>
+            <param name="ToolName">The name of the tool.</param>
+            <param name="Input">The input parameters for the tool.</param>
+            <param name="CreatedAt">When the approval request was created.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.Models.PendingToolExecution.#ctor(System.String,System.String,System.String,System.String,System.Object,System.DateTimeOffset)">
+            <summary>
+            Represents a pending tool execution that requires approval.
+            </summary>
+            <param name="Id">The unique ID of this pending execution.</param>
+            <param name="SessionId">The session requesting the tool execution.</param>
+            <param name="ToolId">The ID of the tool to be executed.</param>
+            <param name="ToolName">The name of the tool.</param>
+            <param name="Input">The input parameters for the tool.</param>
+            <param name="CreatedAt">When the approval request was created.</param>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PendingToolExecution.Id">
+            <summary>The unique ID of this pending execution.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PendingToolExecution.SessionId">
+            <summary>The session requesting the tool execution.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PendingToolExecution.ToolId">
+            <summary>The ID of the tool to be executed.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PendingToolExecution.ToolName">
+            <summary>The name of the tool.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PendingToolExecution.Input">
+            <summary>The input parameters for the tool.</summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.Models.PendingToolExecution.CreatedAt">
+            <summary>When the approval request was created.</summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.OpenCodeClient">
+            <summary>
+            Client for communicating with an OpenCode server.
+            </summary>
+            <remarks>
+            <para>
+            This client provides access to all OpenCode server operations including session management,
+            message handling, tool operations, file access, and configuration retrieval.
+            </para>
+            <para>
+            The client is thread-safe and can be used for concurrent operations.
+            For best performance in DI scenarios, use IHttpClientFactory to manage HttpClient lifetime.
+            </para>
+            </remarks>
+            <example>
+            Basic usage:
+            <code>
+            await using var client = new OpenCodeClient();
+            var session = await client.CreateSessionAsync();
+            var response = await client.SendMessageAsync(session.Id, "Hello, OpenCode!");
+            Console.WriteLine(response.Parts.OfType&lt;TextPart&gt;().First().Text);
+            </code>
+            </example>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.OpenCodeClient"/> class with default options.
+            </summary>
+            <remarks>
+            Uses the default base URL <c>http://localhost:9123</c>.
+            </remarks>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.OpenCodeClient"/> class with a custom base URL.
+            </summary>
+            <param name="baseUrl">The base URL of the OpenCode server.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.#ctor(LionFire.OpenCode.Serve.OpenCodeClientOptions,Microsoft.Extensions.Logging.ILogger{LionFire.OpenCode.Serve.OpenCodeClient})">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.OpenCodeClient"/> class with options.
+            </summary>
+            <param name="options">The client configuration options.</param>
+            <param name="logger">Optional logger for diagnostics.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.#ctor(System.Net.Http.HttpClient,LionFire.OpenCode.Serve.OpenCodeClientOptions,Microsoft.Extensions.Logging.ILogger{LionFire.OpenCode.Serve.OpenCodeClient})">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.OpenCodeClient"/> class with an existing HttpClient.
+            </summary>
+            <param name="httpClient">The HttpClient to use for requests.</param>
+            <param name="options">Optional client configuration options.</param>
+            <param name="logger">Optional logger for diagnostics.</param>
+            <remarks>
+            When using this constructor, the HttpClient is not owned by this instance
+            and will not be disposed when this client is disposed.
+            </remarks>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.#ctor(Microsoft.Extensions.Options.IOptions{LionFire.OpenCode.Serve.OpenCodeClientOptions},Microsoft.Extensions.Logging.ILogger{LionFire.OpenCode.Serve.OpenCodeClient})">
+            <summary>
+            Initializes a new instance of the <see cref="T:LionFire.OpenCode.Serve.OpenCodeClient"/> class using IOptions pattern.
+            </summary>
+            <param name="options">The client configuration options from DI.</param>
+            <param name="logger">Optional logger for diagnostics.</param>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.PingAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.CreateSessionAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.CreateSessionAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetSessionAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.ListSessionsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.DeleteSessionAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.ForkSessionAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.AbortSessionAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.ShareSessionAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.UnshareSessionAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.CreateSessionScopeAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.SendMessageAsync(System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.MessagePart},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.SendMessageAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.SendMessageStreamingAsync(System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.MessagePart},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.SendMessageStreamingAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetMessagesAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetMessageAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetToolsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetToolAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.ApproveToolAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.DenyToolAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.UpdateToolPermissionsAsync(System.String,System.String,LionFire.OpenCode.Serve.Models.ToolPermission,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.ListFilesAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetFileContentAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.SearchFilesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.ApplyChangesAsync(System.String,System.Collections.Generic.IReadOnlyList{LionFire.OpenCode.Serve.Models.FileChange},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.ExecuteCommandAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetConfigAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetProvidersAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.GetModelsAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClient.DisposeAsync">
+            <inheritdoc />
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.OpenCodeClient.SessionScope">
+            <summary>
+            Implementation of <see cref="T:LionFire.OpenCode.Serve.ISessionScope"/> that automatically deletes the session on disposal.
+            </summary>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.OpenCodeClientOptions">
+            <summary>
+            Configuration options for <see cref="T:LionFire.OpenCode.Serve.OpenCodeClient"/>.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.OpenCodeClientOptions.DefaultBaseUrl">
+            <summary>
+            Default base URL for the OpenCode server.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.OpenCodeClientOptions.DefaultQuickTimeout">
+            <summary>
+            Default timeout for quick operations (list, get, delete).
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.OpenCodeClientOptions.DefaultMessageTimeout">
+            <summary>
+            Default timeout for message operations (AI responses).
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.OpenCodeClientOptions.DefaultMaxRetryAttempts">
+            <summary>
+            Default maximum number of retry attempts for transient failures.
+            </summary>
+        </member>
+        <member name="F:LionFire.OpenCode.Serve.OpenCodeClientOptions.DefaultRetryDelaySeconds">
+            <summary>
+            Default delay between retry attempts in seconds.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.BaseUrl">
+            <summary>
+            Gets or sets the base URL of the OpenCode server.
+            Defaults to <c>http://localhost:9123</c>.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.Directory">
+            <summary>
+            Gets or sets the optional working directory for the OpenCode server.
+            When set, this directory is used as the context for file operations.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.DefaultTimeout">
+            <summary>
+            Gets or sets the default timeout for quick operations (list, get, delete).
+            Defaults to 30 seconds.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.MessageTimeout">
+            <summary>
+            Gets or sets the timeout for message operations that involve AI responses.
+            Defaults to 5 minutes.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.EnableRetry">
+            <summary>
+            Gets or sets whether to enable automatic retry for transient failures.
+            Defaults to <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.MaxRetryAttempts">
+            <summary>
+            Gets or sets the maximum number of retry attempts for transient failures.
+            Defaults to 3.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.RetryDelaySeconds">
+            <summary>
+            Gets or sets the delay between retry attempts in seconds.
+            Uses exponential backoff starting from this value.
+            Defaults to 2 seconds.
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.EnableTelemetry">
+            <summary>
+            Gets or sets whether to enable OpenTelemetry tracing.
+            Defaults to true (tracing is enabled if there are listeners).
+            </summary>
+        </member>
+        <member name="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.ValidateOnStart">
+            <summary>
+            Gets or sets whether to validate options on startup.
+            Defaults to true.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClientOptions.ValidateBaseUrl">
+            <summary>
+            Validates that the <see cref="P:LionFire.OpenCode.Serve.OpenCodeClientOptions.BaseUrl"/> is a valid URI.
+            </summary>
+            <returns><c>true</c> if the base URL is valid; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="T:LionFire.OpenCode.Serve.OpenCodeClientOptionsValidator">
+            <summary>
+            Validates <see cref="T:LionFire.OpenCode.Serve.OpenCodeClientOptions"/> on startup.
+            </summary>
+        </member>
+        <member name="M:LionFire.OpenCode.Serve.OpenCodeClientOptionsValidator.Validate(System.String,LionFire.OpenCode.Serve.OpenCodeClientOptions)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
