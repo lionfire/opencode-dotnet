@@ -1,0 +1,4 @@
+// Active Axi modules for this project
+modules: [
+  "/src/axi/modules/pm"
+]

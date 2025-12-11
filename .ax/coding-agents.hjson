@@ -1,0 +1,36 @@
+// # Project Settings
+// This file should be placed at {project_root}/.ax/coding-agents.hjson
+
+// Scales are from 0.0 (none) to 1.0 (max) unless otherwise specified.
+
+// ## Resourcing
+resourcing: {
+  implementation-speed: 0.8  // Community SDK with good pace but not rushed
+}
+
+
+// ## Thoroughness
+// Thoroughness relates to completeness of:
+// - security analysis
+// - unit tests
+// - e2e tests
+// - code reviews
+// - any other forms of production readiness
+thoroughness: { // Scale from 0 (none) to 1 (max)
+  // How much thoroughness do you **currently** want for this project?
+  current: 0.7  // SDK needs good quality from the start
+  // How much thoroughness do you **eventually** want for this project?
+  eventual: 1.0  // Public NuGet package needs production quality
+}
+//   - This is a public SDK that will be published to NuGet, so quality is important from the start
+// - (If both are high, it is likely that I have a product for public use in mind, and want to get it production-ready ASAP)
+
+
+// ## User involvement
+
+user-involvement: {
+  writing-code: 0
+  code-review: 0.3  // Some review for SDK patterns
+  architecture-review: 0.7  // Higher review for API design decisions
+  ui-review: 0  // No UI in this SDK
+}

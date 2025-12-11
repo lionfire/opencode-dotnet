@@ -1,0 +1,15 @@
+// Axi Project Configuration for opencode-dotnet
+// Community .NET SDK for OpenCode AI coding agent
+
+name: opencode-dotnet
+description: Community .NET SDK for OpenCode - the open-source terminal-first AI coding agent
+type: project
+
+// Project metadata
+metadata: {
+  language: csharp
+  framework: dotnet
+  targetFrameworks: ["net8.0"]
+  packageName: OpencodeAI
+  repository: "https://github.com/yourusername/opencode-dotnet"
+}

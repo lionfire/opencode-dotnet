@@ -1,0 +1,15 @@
+// Migration system configuration
+migrationLevel: 10  // Current migration level
+
+// Migration metadata
+metadata: {
+  lastMigration: "2025-12-06T19:30:00Z"
+  migrationsPath: /src/axi/migrations
+}
+
+// Migration execution settings
+execution: {
+  autoUpdate: true
+  validateBeforeApply: true
+  backupBeforeMigration: false
+}
