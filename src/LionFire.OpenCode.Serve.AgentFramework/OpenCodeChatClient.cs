@@ -57,7 +57,7 @@ public class OpenCodeChatClient : IChatClient
         // Ensure we have a session
         if (_sessionId is null)
         {
-            var session = await _client.CreateSessionAsync(_options.Directory, cancellationToken);
+            var session = await _client.CreateSessionAsync(directory: _options.Directory, cancellationToken: cancellationToken);
             _sessionId = session.Id;
         }
 
@@ -69,14 +69,19 @@ public class OpenCodeChatClient : IChatClient
             throw new ArgumentException("No user message found in chat messages", nameof(chatMessages));
         }
 
-        // Convert to OpenCode message parts
-        var parts = ConvertToParts(lastMessage);
+        // Convert to OpenCode part inputs
+        var partInputs = MessageConverter.ToPartInputs(lastMessage);
 
         // Send and get response
-        var response = await _client.SendMessageAsync(_sessionId, parts, cancellationToken);
+        var request = new SendMessageRequest
+        {
+            Parts = partInputs.ToList(),
+            Model = _options.Model
+        };
+        var response = await _client.PromptAsync(_sessionId, request, _options.Directory, cancellationToken);
 
         // Convert back to ChatResponse
-        return ConvertToResponse(response);
+        return MessageConverter.ToChatResponse(response);
     }
 
     /// <inheritdoc />
@@ -85,47 +90,32 @@ public class OpenCodeChatClient : IChatClient
         ChatOptions? options = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(chatMessages);
+        // True streaming is not currently supported - the OpenCode API uses SSE events
+        // which would require subscribing to SubscribeToEventsAsync while calling PromptAsyncNonBlocking.
+        // For now, fall back to non-streaming and emit the response content as a single update.
+        var response = await GetResponseAsync(chatMessages, options, cancellationToken);
 
-        // Ensure we have a session
-        if (_sessionId is null)
+        // Yield a single update with the content from the response
+        var update = new ChatResponseUpdate
         {
-            var session = await _client.CreateSessionAsync(_options.Directory, cancellationToken);
-            _sessionId = session.Id;
-        }
+            Role = ChatRole.Assistant,
+            FinishReason = response.FinishReason,
+            MessageId = response.ResponseId
+        };
 
-        // Get the last user message
-        var messagesList = chatMessages.ToList();
-        var lastMessage = messagesList.LastOrDefault(m => m.Role == ChatRole.User);
-        if (lastMessage is null)
+        // Add the content from the response messages
+        if (response.Messages.Count > 0)
         {
-            throw new ArgumentException("No user message found in chat messages", nameof(chatMessages));
-        }
-
-        // Convert to OpenCode message parts
-        var parts = ConvertToParts(lastMessage);
-
-        // Stream response
-        await foreach (var update in _client.SendMessageStreamingAsync(_sessionId, parts, cancellationToken))
-        {
-            if (update.Delta is not null)
+            foreach (var message in response.Messages)
             {
-                yield return new ChatResponseUpdate(ChatRole.Assistant, update.Delta)
+                foreach (var content in message.Contents)
                 {
-                    MessageId = update.MessageId
-                };
-            }
-
-            if (update.Done)
-            {
-                yield return new ChatResponseUpdate
-                {
-                    Role = ChatRole.Assistant,
-                    FinishReason = ChatFinishReason.Stop,
-                    MessageId = update.MessageId
-                };
+                    update.Contents.Add(content);
+                }
             }
         }
+
+        yield return update;
     }
 
     /// <inheritdoc />
@@ -153,76 +143,7 @@ public class OpenCodeChatClient : IChatClient
     public void Dispose()
     {
         // Session cleanup is handled by the user via SessionId management
-        // or using ISessionScope in the IOpenCodeClient
-    }
-
-    private IReadOnlyList<MessagePart> ConvertToParts(ChatMessage message)
-    {
-        var parts = new List<MessagePart>();
-
-        foreach (var content in message.Contents)
-        {
-            switch (content)
-            {
-                case TextContent textContent:
-                    parts.Add(new TextPart(textContent.Text ?? string.Empty));
-                    break;
-
-                // Add more content type handlers as needed
-                default:
-                    if (content is { } anyContent)
-                    {
-                        parts.Add(new TextPart(anyContent.ToString() ?? string.Empty));
-                    }
-                    break;
-            }
-        }
-
-        return parts;
-    }
-
-    private ChatResponse ConvertToResponse(Message message)
-    {
-        var chatMessage = new ChatMessage
-        {
-            Role = message.Role switch
-            {
-                MessageRole.User => ChatRole.User,
-                MessageRole.Assistant => ChatRole.Assistant,
-                MessageRole.System => ChatRole.System,
-                MessageRole.Tool => ChatRole.Tool,
-                _ => ChatRole.Assistant
-            }
-        };
-
-        foreach (var part in message.Parts)
-        {
-            switch (part)
-            {
-                case TextPart textPart:
-                    chatMessage.Contents.Add(new TextContent(textPart.Text));
-                    break;
-
-                case ToolUsePart toolUse:
-                    chatMessage.Contents.Add(new FunctionCallContent(
-                        toolUse.ToolId,
-                        toolUse.ToolName,
-                        toolUse.Input as IDictionary<string, object?>));
-                    break;
-
-                case ToolResultPart toolResult:
-                    chatMessage.Contents.Add(new FunctionResultContent(
-                        toolResult.ToolId,
-                        toolResult.Output));
-                    break;
-            }
-        }
-
-        return new ChatResponse(chatMessage)
-        {
-            ResponseId = message.Id,
-            CreatedAt = message.CreatedAt
-        };
+        // The underlying IOpenCodeClient should be managed by DI or the caller
     }
 }
 
@@ -251,4 +172,10 @@ public class OpenCodeChatClientOptions
     /// Defaults to false (reuse session).
     /// </summary>
     public bool CreateSessionPerConversation { get; set; }
+
+    /// <summary>
+    /// Gets or sets the model to use for prompts.
+    /// If set, this model will be used for all requests from this chat client.
+    /// </summary>
+    public ModelReference? Model { get; set; }
 }

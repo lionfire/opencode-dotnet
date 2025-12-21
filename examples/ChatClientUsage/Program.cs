@@ -158,7 +158,7 @@ try
     Console.WriteLine();
 
     // Example 4: Streaming responses
-    Console.WriteLine("4. Streaming response...");
+    Console.WriteLine("4. Streaming response (simulated - returns complete response)...");
     Console.Write("   ");
 
     var streamMessages = new List<ChatMessage>
@@ -168,44 +168,28 @@ try
 
     // Create a new chat client for streaming (to get fresh session)
     var streamChatClient = openCodeClient.AsChatClient(model: modelRef);
-    var streamedContent = new System.Text.StringBuilder();
 
     await foreach (var update in streamChatClient.GetStreamingResponseAsync(streamMessages))
     {
-        // Try to get text content from the update
+        // Get text content from the update
         foreach (var content in update.Contents)
         {
             if (content is TextContent textContent && !string.IsNullOrEmpty(textContent.Text))
             {
-                // Check if this is new content (delta) by comparing with what we've seen
-                var newText = textContent.Text;
-                if (newText.Length > streamedContent.Length && newText.StartsWith(streamedContent.ToString()))
+                // Show the response (note: currently returns full response, not true streaming)
+                var lines = textContent.Text.Split('\n');
+                foreach (var line in lines)
                 {
-                    // This is accumulated text - extract just the delta
-                    var delta = newText.Substring(streamedContent.Length);
-                    Console.Write(delta);
-                    streamedContent.Append(delta);
-                }
-                else if (streamedContent.Length == 0)
-                {
-                    // First content
-                    Console.Write(newText);
-                    streamedContent.Append(newText);
+                    if (!string.IsNullOrWhiteSpace(line))
+                        Console.WriteLine(line.Trim());
                 }
             }
         }
 
         if (update.FinishReason == ChatFinishReason.Stop)
         {
-            Console.WriteLine();
-            Console.WriteLine("   [Stream completed]");
+            Console.WriteLine("   [Complete]");
         }
-    }
-
-    // If nothing was streamed via contents, show what we got
-    if (streamedContent.Length == 0)
-    {
-        Console.WriteLine("(streaming produced no visible output - model may not support streaming)");
     }
     Console.WriteLine();
 
