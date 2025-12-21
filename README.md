@@ -5,6 +5,10 @@ A .NET SDK for interacting with [OpenCode](https://github.com/opencode-ai/openco
 [![NuGet](https://img.shields.io/nuget/v/LionFire.OpenCode.Serve.svg)](https://www.nuget.org/packages/LionFire.OpenCode.Serve)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+## Status
+
+Early WIP / prerelease.  Though the basic communication with OpenCode appears to be working.
+
 ## Features
 
 - Full coverage of OpenCode Server API endpoints
