@@ -1,0 +1,53 @@
+/*
+ * AgUi.Chat.BlazorServer App Styles
+ * Additional styles for the chat application
+ */
+
+/* Ensure full height layout */
+html, body, #app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Chat message scrolling */
+.overflow-y-auto {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-base) var(--surface-inset-base);
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+    background: var(--surface-inset-base);
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+    background: var(--border-base);
+    border-radius: var(--radius-sm);
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+}
+
+/* Message bubble max width */
+.max-w-\[80\%\] {
+    max-width: 80%;
+}
+
+/* Code blocks in messages */
+pre {
+    background-color: var(--surface-inset-base);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+}
+
+code {
+    font-family: var(--font-family-mono);
+    font-size: 0.875rem;
+}

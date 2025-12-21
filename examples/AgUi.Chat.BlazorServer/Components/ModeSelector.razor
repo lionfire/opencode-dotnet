@@ -1,0 +1,214 @@
+@using AgUi.Chat.BlazorServer.Services
+@using Microsoft.Extensions.Options
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Spacing="4" Class="pa-4" Style="min-width: 400px;">
+            @if (_state == DetectionState.Detecting)
+            {
+                <!-- Detection in progress -->
+                <MudStack AlignItems="AlignItems.Center" Spacing="3">
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+                    <MudText Typo="Typo.h6">Detecting OpenCode</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">
+                        Checking @_launcher?.BaseUrl ...
+                    </MudText>
+                </MudStack>
+            }
+            else if (_state == DetectionState.Connected)
+            {
+                <!-- OpenCode detected and connected -->
+                <MudStack AlignItems="AlignItems.Center" Spacing="3">
+                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Large" />
+                    <MudText Typo="Typo.h6" Color="Color.Success">OpenCode Connected</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">
+                        Ready to chat with AI
+                    </MudText>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Success"
+                               Size="Size.Large"
+                               OnClick="@(() => SelectMode(ChatMode.OpenCode))"
+                               Class="mt-4"
+                               Style="min-width: 200px;">
+                        Continue
+                    </MudButton>
+                </MudStack>
+            }
+            else if (_state == DetectionState.NotFound)
+            {
+                <!-- OpenCode not detected -->
+                <MudStack AlignItems="AlignItems.Center" Spacing="3">
+                    <MudIcon Icon="@Icons.Material.Filled.CloudOff" Color="Color.Warning" Size="Size.Large" />
+                    <MudText Typo="Typo.h6">OpenCode Not Detected</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Align="Align.Center">
+                        Could not connect to OpenCode at @_launcher?.BaseUrl
+                    </MudText>
+
+                    @if (!string.IsNullOrEmpty(_errorMessage))
+                    {
+                        <MudAlert Severity="Severity.Error" Dense="true" Class="mt-2">
+                            @_errorMessage
+                        </MudAlert>
+                    }
+
+                    <MudStack Row="true" Justify="Justify.Center" Spacing="4" Class="mt-4">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Size="Size.Large"
+                                   StartIcon="@Icons.Material.Filled.PlayArrow"
+                                   OnClick="StartOpenCode"
+                                   Disabled="@_isStarting"
+                                   Class="mode-button">
+                            @if (_isStarting)
+                            {
+                                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                                <span>Starting...</span>
+                            }
+                            else
+                            {
+                                <MudStack Spacing="1" AlignItems="AlignItems.Center">
+                                    <MudText Typo="Typo.h6">Start OpenCode</MudText>
+                                    <MudText Typo="Typo.caption">Launch opencode serve</MudText>
+                                </MudStack>
+                            }
+                        </MudButton>
+
+                        @if (_demoSettings?.MockBackendEnabled == true)
+                        {
+                            <MudButton Variant="Variant.Outlined"
+                                       Color="Color.Secondary"
+                                       Size="Size.Large"
+                                       StartIcon="@Icons.Material.Filled.Science"
+                                       OnClick="@(() => SelectMode(ChatMode.Mock))"
+                                       Class="mode-button">
+                                <MudStack Spacing="1" AlignItems="AlignItems.Center">
+                                    <MudText Typo="Typo.h6">Use Mock</MudText>
+                                    <MudText Typo="Typo.caption">Simulated responses</MudText>
+                                </MudStack>
+                            </MudButton>
+                        }
+                    </MudStack>
+
+                    <MudButton Variant="Variant.Text"
+                               Color="Color.Default"
+                               Size="Size.Small"
+                               StartIcon="@Icons.Material.Filled.Refresh"
+                               OnClick="RetryDetection"
+                               Class="mt-2">
+                        Retry Detection
+                    </MudButton>
+                </MudStack>
+            }
+        </MudStack>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    private enum DetectionState { Detecting, Connected, NotFound }
+    private DetectionState _state = DetectionState.Detecting;
+    private string? _errorMessage;
+    private bool _isStarting = false;
+
+    [CascadingParameter]
+    private MudDialogInstance? MudDialog { get; set; }
+
+    [Inject]
+    private OpenCodeLauncher? _launcher { get; set; }
+
+    [Inject]
+    private IOptions<DemoSettings>? _demoSettingsOptions { get; set; }
+
+    private DemoSettings? _demoSettings => _demoSettingsOptions?.Value;
+
+    protected override void OnInitialized()
+    {
+        // Start detection in background, don't block initialization
+        _ = DetectOpenCodeAsync();
+    }
+
+    private async Task DetectOpenCodeAsync()
+    {
+        try
+        {
+            _state = DetectionState.Detecting;
+            _errorMessage = null;
+            await InvokeAsync(StateHasChanged);
+
+            // Small delay to show the detecting state
+            await Task.Delay(500);
+
+            bool isRunning = false;
+            if (_launcher != null)
+            {
+                try
+                {
+                    isRunning = await _launcher.IsRunningAsync();
+                }
+                catch
+                {
+                    isRunning = false;
+                }
+            }
+
+            _state = isRunning ? DetectionState.Connected : DetectionState.NotFound;
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _state = DetectionState.NotFound;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task RetryDetection()
+    {
+        await DetectOpenCodeAsync();
+    }
+
+    private async Task StartOpenCode()
+    {
+        if (_launcher == null) return;
+
+        _isStarting = true;
+        _errorMessage = null;
+        StateHasChanged();
+
+        try
+        {
+            var result = await _launcher.StartAsync();
+
+            if (result.Success)
+            {
+                _state = DetectionState.Connected;
+            }
+            else
+            {
+                _errorMessage = result.Message;
+                _state = DetectionState.NotFound;
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+            _state = DetectionState.NotFound;
+        }
+        finally
+        {
+            _isStarting = false;
+            StateHasChanged();
+        }
+    }
+
+    private void SelectMode(ChatMode mode)
+    {
+        MudDialog?.Close(DialogResult.Ok(mode));
+    }
+}
+
+<style>
+    .mode-button {
+        min-width: 160px;
+        min-height: 80px;
+    }
+</style>

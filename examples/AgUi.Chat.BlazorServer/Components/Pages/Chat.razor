@@ -1,0 +1,188 @@
+@page "/chat"
+@using AgUi.Chat.BlazorServer.Services
+@inject NavigationManager Navigation
+@inject ChatModeState ModeState
+@inject IChatService ChatService
+@implements IAsyncDisposable
+
+<PageTitle>Chat - OpenCode</PageTitle>
+
+<div class="flex flex-col h-full">
+    <!-- Chat Header -->
+    <div class="flex items-center justify-between p-4 border-b border-border-base">
+        <div class="flex items-center gap-3">
+            <MudText Typo="Typo.h6" Class="text-text-strong">Chat Session</MudText>
+            <MudChip T="string" Color="Color.Success" Size="Size.Small">
+                @ChatService.BackendName
+            </MudChip>
+        </div>
+        <MudChip T="string" Color="@(isConnected ? Color.Success : Color.Error)" Size="Size.Small">
+            @(isConnected ? "Connected" : "Disconnected")
+        </MudChip>
+    </div>
+
+    <!-- Message List -->
+    <div class="flex-1 overflow-y-auto p-4" @ref="messageContainer">
+        @if (messages.Count == 0)
+        {
+            <div class="flex items-center justify-center h-full">
+                <MudStack Spacing="2" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Large" Color="Color.Primary" />
+                    <MudText Class="text-text-weaker">Start a conversation by typing a message below.</MudText>
+                </MudStack>
+            </div>
+        }
+        else
+        {
+            @foreach (var message in messages)
+            {
+                <div class="mb-4 @(message.IsUser ? "flex justify-end" : "flex justify-start")">
+                    <div class="max-w-[80%] @(message.IsUser ? "bg-surface-interactive-base" : "bg-surface-raised-base") rounded-lg p-3">
+                        <div class="flex items-center gap-2 mb-1">
+                            <MudIcon Icon="@(message.IsUser ? Icons.Material.Filled.Person : Icons.Material.Filled.SmartToy)"
+                                     Size="Size.Small"
+                                     Class="text-icon-base" />
+                            <MudText Typo="Typo.caption" Class="text-text-weak">
+                                @(message.IsUser ? "You" : "Assistant")
+                            </MudText>
+                            <MudText Typo="Typo.caption" Class="text-text-weaker">
+                                @message.Timestamp.ToString("HH:mm")
+                            </MudText>
+                        </div>
+                        <MudText Class="text-text-base whitespace-pre-wrap">@message.Content</MudText>
+                        @if (message.IsStreaming)
+                        {
+                            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mt-2" />
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <!-- Input Area -->
+    <div class="p-4 border-t border-border-base bg-surface-raised-base">
+        <div class="flex gap-2">
+            <MudPaper Class="flex-1 pa-0" Outlined="true">
+                <input type="text"
+                       @bind="inputMessage"
+                       @bind:event="oninput"
+                       @onkeydown="HandleKeyDown"
+                       placeholder="Type your message... (Enter to send)"
+                       disabled="@(!isConnected || isWaitingForResponse)"
+                       class="mud-input-slot mud-input-root mud-input-root-outlined"
+                       style="width: 100%; padding: 12px 14px; border: none; background: transparent; outline: none; font-size: inherit; font-family: inherit;" />
+            </MudPaper>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Disabled="@(string.IsNullOrWhiteSpace(inputMessage) || !isConnected || isWaitingForResponse)"
+                       OnClick="SendMessage">
+                <MudIcon Icon="@Icons.Material.Filled.Send" />
+            </MudButton>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<ChatMessage> messages = new();
+    private string inputMessage = "";
+    private bool isConnected = true;
+    private bool isWaitingForResponse = false;
+    private ElementReference messageContainer;
+    private CancellationTokenSource? _cts;
+
+    protected override void OnInitialized()
+    {
+        // Redirect to setup if mode hasn't been selected
+        if (!ModeState.IsModeSelected)
+        {
+            Navigation.NavigateTo("/setup");
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            await SendMessage();
+        }
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(inputMessage))
+            return;
+
+        var message = inputMessage.Trim();
+        inputMessage = "";
+
+        // Add user message
+        messages.Add(new ChatMessage
+        {
+            Content = message,
+            IsUser = true,
+            Timestamp = DateTime.Now,
+            IsStreaming = false
+        });
+
+        isWaitingForResponse = true;
+        StateHasChanged();
+
+        // Create a streaming assistant message
+        var assistantMessage = new ChatMessage
+        {
+            Content = "",
+            IsUser = false,
+            Timestamp = DateTime.Now,
+            IsStreaming = true
+        };
+        messages.Add(assistantMessage);
+
+        try
+        {
+            _cts = new CancellationTokenSource();
+
+            // Stream the response from the chat service
+            await foreach (var chunk in ChatService.SendMessageAsync(message, _cts.Token))
+            {
+                assistantMessage.Content += chunk;
+                StateHasChanged();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // User cancelled, that's fine
+        }
+        catch (Exception ex)
+        {
+            assistantMessage.Content += $"\n\n_Error: {ex.Message}_";
+        }
+        finally
+        {
+            assistantMessage.IsStreaming = false;
+            isWaitingForResponse = false;
+            _cts?.Dispose();
+            _cts = null;
+            StateHasChanged();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+
+        if (ChatService is IAsyncDisposable asyncDisposable)
+        {
+            await asyncDisposable.DisposeAsync();
+        }
+    }
+
+    private class ChatMessage
+    {
+        public string Content { get; set; } = "";
+        public bool IsUser { get; set; }
+        public DateTime Timestamp { get; set; }
+        public bool IsStreaming { get; set; }
+    }
+}
