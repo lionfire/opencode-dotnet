@@ -218,60 +218,148 @@ catch (OpenCodeTimeoutException ex)
 }
 ```
 
-### Tool Operations
+### Permission Handling
 
 ```csharp
-// List available tools
-var tools = await client.GetToolsAsync(sessionId);
+// Respond to a permission request
+// Permissions cover bash, edit, webfetch, and other operations
+await client.RespondToPermissionAsync(sessionId, permissionId, PermissionResponse.Once);
 
-// Approve/reject tool execution
-await client.ApproveToolAsync(sessionId, toolId, approved: true);
+// Options: PermissionResponse.Once, PermissionResponse.Always, PermissionResponse.Reject
 ```
 
-### File Operations
+### File Operations (Directory-scoped)
 
 ```csharp
-// List files in session context
-var files = await client.GetFilesAsync(sessionId);
+// List files in a directory
+var files = await client.ListFilesAsync(path: ".", directory: "/path/to/project");
 
-// Get specific file content
-var content = await client.GetFileContentAsync(sessionId, "/path/to/file.cs");
+// Read file content
+var content = await client.ReadFileAsync("/path/to/file.cs", directory: "/path/to/project");
+
+// Get git status for files
+var status = await client.GetFileStatusAsync(directory: "/path/to/project");
 ```
 
-### Pagination
+### Find Operations
 
 ```csharp
-using LionFire.OpenCode.Serve.Models;
+// Search for text in files (ripgrep)
+var textMatches = await client.FindTextAsync("TODO", directory: "/path/to/project");
 
-// List sessions with pagination
-var options = new PaginationOptions
-{
-    Limit = 10,
-    Offset = 0
-};
+// Search for files by name
+var files = await client.FindFilesAsync("*.cs", directory: "/path/to/project");
 
-var sessions = await client.GetSessionsAsync(options);
+// Search for symbols (LSP)
+var symbols = await client.FindSymbolsAsync("MyClass", directory: "/path/to/project");
 ```
 
 ## API Reference
 
 ### IOpenCodeClient
 
+#### Core Session Operations
 | Method | Description |
 |--------|-------------|
 | `CreateSessionAsync` | Create a new OpenCode session |
 | `GetSessionAsync` | Get session by ID |
-| `GetSessionsAsync` | List all sessions with pagination |
+| `ListSessionsAsync` | List all sessions |
 | `DeleteSessionAsync` | Delete a session |
-| `SendMessageAsync` | Send a message and wait for response |
-| `SendMessageStreamingAsync` | Send a message and stream response |
-| `GetMessagesAsync` | Get messages for a session |
-| `GetToolsAsync` | List available tools |
-| `ApproveToolAsync` | Approve or reject tool execution |
-| `GetFilesAsync` | List files in session context |
-| `GetFileContentAsync` | Get file content |
+| `ForkSessionAsync` | Fork session at message point |
+| `ShareSessionAsync` | Share session (get share URL) |
+| `UnshareSessionAsync` | Remove session sharing |
+| `UpdateSessionAsync` | Update session (title, etc.) |
+
+#### Message Operations
+| Method | Description |
+|--------|-------------|
+| `PromptAsync` | Send message and get AI response |
+| `PromptAsyncNonBlocking` | Send message asynchronously (returns immediately) |
+| `ListMessagesAsync` | Get all messages in session |
+| `GetMessageAsync` | Get specific message by ID |
+
+#### Permission Operations
+| Method | Description |
+|--------|-------------|
+| `RespondToPermissionAsync` | Respond to permission request (once/always/reject) |
+
+#### File Operations (Directory-scoped)
+| Method | Description |
+|--------|-------------|
+| `ListFilesAsync` | List files in directory |
+| `ReadFileAsync` | Read file content |
+| `GetFileStatusAsync` | Get git status for files |
+
+#### Find Operations
+| Method | Description |
+|--------|-------------|
+| `FindTextAsync` | Search text in files (ripgrep) |
+| `FindFilesAsync` | Search files by name |
+| `FindSymbolsAsync` | Search symbols (LSP) |
+
+#### Configuration
+| Method | Description |
+|--------|-------------|
 | `GetConfigAsync` | Get server configuration |
-| `CreateSessionScopeAsync` | Create auto-disposing session scope |
+| `UpdateConfigAsync` | Update configuration |
+| `GetConfiguredProvidersAsync` | Get configured AI providers |
+| `GetAllProvidersAsync` | Get all available providers |
+
+#### Advanced Features
+| Method | Description |
+|--------|-------------|
+| `CreatePtyAsync` | Create pseudo-terminal session |
+| `ListPtySessionsAsync` | List PTY sessions |
+| `SubscribeToEventsAsync` | Subscribe to server events (SSE) |
+| `GetVcsInfoAsync` | Get version control info |
+| `ListAgentsAsync` | List available agents |
+
+See full interface at `/src/opencode-dotnet/src/LionFire.OpenCode.Serve/IOpenCodeClient.cs` for all 60+ methods.
+
+## Version 2.0 Breaking Changes
+
+The SDK was completely redesigned in v2.0 to match the actual OpenCode serve API specification. Key changes:
+
+### API Paradigm Shift
+
+**v1.0 (Hypothetical)**: Session-scoped operations
+```csharp
+// OLD - Does not match actual API
+var files = await client.GetFilesAsync(sessionId);
+await client.ApproveToolAsync(sessionId, toolId);
+```
+
+**v2.0 (Actual API)**: Directory-scoped operations
+```csharp
+// NEW - Matches actual OpenCode serve API
+var files = await client.ListFilesAsync(path: ".", directory: "/project");
+await client.RespondToPermissionAsync(sessionId, permissionId, PermissionResponse.Once);
+```
+
+### Major Changes
+
+1. **File Operations**:
+   - `GetFilesAsync(sessionId)` → `ListFilesAsync(path, directory)`
+   - `GetFileContentAsync(sessionId, path)` → `ReadFileAsync(path, directory)`
+   - Files are directory-scoped, not session-scoped
+
+2. **Permission System**:
+   - `ApproveToolAsync(sessionId, toolId)` → `RespondToPermissionAsync(sessionId, permissionId, response)`
+   - Permissions are generic (cover bash, edit, webfetch), not tool-specific
+
+3. **Messages**:
+   - `SendMessageAsync()` → `PromptAsync()`
+   - Return type changed from `Message` to `MessageWithParts`
+   - Messages split into `UserMessage` and `AssistantMessage`
+
+4. **Session Model**:
+   - Complete restructure with new properties: `ProjectId`, `Title`, `Version`, `Time`, `Summary`
+   - Timestamps now use Unix epoch (milliseconds)
+
+5. **Removed Features**:
+   - No pagination API (removed `PaginationOptions`)
+   - No batch file apply (`ApplyChangesAsync` removed)
+   - No `ISessionScope` helper (use manual session cleanup)
 
 ### Configuration Options
 
