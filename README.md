@@ -7,7 +7,8 @@ A .NET SDK for interacting with [OpenCode](https://github.com/opencode-ai/openco
 
 ## Status
 
-Early WIP / prerelease.  Though the basic communication with OpenCode appears to be working.
+Experimental vibe code. See [Plan Status](#plan-status).
+- the basic communication with OpenCode appears to be working.
 
 ## Features
 
@@ -418,6 +419,66 @@ services.AddOpenTelemetry()
 
 - .NET 8.0 or later
 - OpenCode server running (`opencode serve`)
+
+<!-- START: axi-plan status -->
+## Plan Status
+
+- **Specs:** 2
+- **Phases:** 4
+- **Epics:** 24
+- **Progress:** 3.8% (26/676 tasks)
+- **Greenlit:** 13
+- **Done:** 11
+- **Needs Attention:** 0
+
+
+### Specifications
+
+| ID | Name | Status | Phases |
+|:---|:-----|:-------|-------:|
+| PRP | Product Requirements Prompt: opencode-dotnet | Draft | 0 |
+| 01 | LionFire.OpenCode.Serve.AgentFramework - Technical Specification | Draft | 0 |
+
+
+### Phases
+
+| Phase | Name | Epics | Completion |
+|------:|:-----|------:|-----------:|
+| 1 | MVP Foundation | 6 | 6% |
+| 2 | Production Hardening | 6 | 0% |
+| 3 | Agent Framework Integration | 6 | 0% |
+| 4 | Polish and Release | 6 | 0% |
+
+
+### Epics
+
+| Greenlit | Phase | Epic | Title | Tasks | Completion |
+|:--------:|------:|-----:|:------|------:|-----------:|
+| ✅ | 1 | 1 | Core Client Infrastructure | 0/190 | 0% |
+| ✅ | 1 | 2 | Session Management API | 0/115 | 0% |
+| ✅ | 1 | 3 | Message and Streaming API | 0/65 | 0% |
+| ✅ | 1 | 4 | File Operations, Permissions, and Command APIs | 26/26 | 100% |
+| ✅ | 1 | 5 | Error Handling and Logging | 0/40 | 0% |
+| ✅ | 1 | 6 | Testing and Examples | 0/37 | 0% |
+| ✅ | 2 | 1 | Source-Generated JSON and AOT | 0/6 | 0% |
+| ✅ | 2 | 2 | HttpClientFactory and Connection Management | 0/6 | 0% |
+| ✅ | 2 | 3 | Polly Resilience Integration | 0/8 | 0% |
+| ✅ | 2 | 4 | OpenTelemetry Observability | 0/8 | 0% |
+| ✅ | 2 | 5 | Advanced API Features | 0/7 | 0% |
+| ✅ | 2 | 6 | Performance Optimization | 0/9 | 0% |
+| ✅ | 3 | 1 | OpencodeAgent Core Implementation | 0/15 | 0% |
+| ✅ | 3 | 2 | Message Conversion Layer | 0/9 | 0% |
+| ✅ | 3 | 3 | Thread Management and Serialization | 0/14 | 0% |
+| ✅ | 3 | 4 | Streaming Integration | 0/7 | 0% |
+| ✅ | 3 | 5 | DI Extensions and Builder Pattern | 0/17 | 0% |
+| ✅ | 3 | 6 | Testing and Examples | 0/23 | 0% |
+| ✅ | 4 | 1 | Documentation Suite | 0/12 | 0% |
+| ✅ | 4 | 2 | Example Projects | 0/13 | 0% |
+| ✅ | 4 | 3 | NuGet Packaging and Publishing | 0/12 | 0% |
+| ✅ | 4 | 4 | Community Infrastructure | 0/13 | 0% |
+| ✅ | 4 | 5 | Security and Legal Review | 0/11 | 0% |
+| ✅ | 4 | 6 | Launch and Marketing | 0/13 | 0% |
+<!-- END: axi-plan status -->
 
 ## Related Projects
 
