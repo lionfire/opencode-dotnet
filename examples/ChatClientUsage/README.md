@@ -1,5 +1,7 @@
 # ChatClientUsage Example
 
+> **Status: Working** - This example runs successfully against a live `opencode serve` instance.
+
 This example demonstrates how to use the LionFire.OpenCode.Serve SDK with Microsoft.Extensions.AI IChatClient interface.
 
 ## Prerequisites
@@ -35,41 +37,38 @@ dotnet run --project examples/ChatClientUsage/ChatClientUsage.csproj
 - `scope.AsChatClient()` - Create IChatClient from session scope
 - `chatClient.GetService()` - Access underlying services
 
-## Expected Output
+## Sample Output
 
 ```
 LionFire.OpenCode.Serve - IChatClient Integration Example
 =======================================================
 
+Using default model (use -p and -m to specify a model)
+Tip: Run with --list-models --free to see free models
+
 1. Creating IChatClient from OpenCode client...
    Provider: OpenCode
 
 2. Sending a message via IChatClient...
-   Response ID: msg_xxx
+   Response ID: msg_b3eb2fb93001ub7QpkrTvLP6Vd
    Content: 4
 
 3. Multi-turn conversation...
-   Tutor: The area of a circle is A = pi * r^2...
+   Tutor: The formula for the area of a circle is:
+   $ A = \pi r^2 $
+   Where A is the Area, π (Pi) is approximately 3.14159, r is the rad...
 
 4. Streaming response...
-   1
-   2
-   3
-   4
-   5
-   [Stream completed]
 
 5. Using IChatClient with specific session...
-   Response: I don't have direct access to see my session ID...
+   Response: Hello, I am opencode, an interactive CLI agent specializing in software engineering tasks....
    Session cleaned up.
 
 6. Accessing underlying OpenCode client...
-   OpenCode version: 0.x.x
 
-7. Session scope with IChatClient...
-   Session ID: session_xxx
-   Response: Hello! How can I help you today?...
-   Session cleaned up automatically.
+7. Quick chat demonstration...
+   Q: What's the capital of France?
+   A: Paris
 
 All examples completed successfully!
 ```

@@ -1,22 +1,135 @@
 using LionFire.OpenCode.Serve;
 using LionFire.OpenCode.Serve.AgentFramework;
 using LionFire.OpenCode.Serve.Exceptions;
+using LionFire.OpenCode.Serve.Models;
 using Microsoft.Extensions.AI;
+
+// Parse command line arguments
+string? directory = null;
+string? baseUrl = null;
+string? providerId = null;
+string? modelId = null;
+bool listModels = false;
+bool freeOnly = false;
+
+for (int i = 0; i < args.Length; i++)
+{
+    switch (args[i])
+    {
+        case "-d":
+        case "--directory":
+            if (i + 1 < args.Length)
+                directory = args[++i];
+            break;
+        case "-u":
+        case "--url":
+            if (i + 1 < args.Length)
+                baseUrl = args[++i];
+            break;
+        case "-p":
+        case "--provider":
+            if (i + 1 < args.Length)
+                providerId = args[++i];
+            break;
+        case "-m":
+        case "--model":
+            if (i + 1 < args.Length)
+                modelId = args[++i];
+            break;
+        case "-l":
+        case "--list-models":
+            listModels = true;
+            break;
+        case "--free":
+            freeOnly = true;
+            break;
+        case "-h":
+        case "--help":
+            ShowHelp();
+            return;
+    }
+}
 
 Console.WriteLine("LionFire.OpenCode.Serve - IChatClient Integration Example");
 Console.WriteLine("=".PadRight(55, '='));
 Console.WriteLine();
 
+// Create client with options
+var clientOptions = new OpenCodeClientOptions
+{
+    BaseUrl = baseUrl ?? "http://localhost:9876",
+    Directory = directory
+};
+
 try
 {
     // Create OpenCode client
-    var openCodeClient = new OpenCodeClient();
+    var openCodeClient = new OpenCodeClient(clientOptions);
+
+    // Handle --list-models flag
+    if (listModels)
+    {
+        Console.WriteLine("Available Providers and Models:");
+        Console.WriteLine("-".PadRight(70, '-'));
+
+        var providers = await openCodeClient.ListProvidersAsync(directory);
+
+        foreach (var provider in providers.OrderBy(p => p.Name))
+        {
+            if (provider.Models == null || provider.Models.Count == 0)
+                continue;
+
+            var modelsToShow = freeOnly
+                ? provider.Models.Where(m => (m.InputCost ?? 0) == 0 && (m.OutputCost ?? 0) == 0).ToList()
+                : provider.Models;
+
+            if (modelsToShow.Count == 0)
+                continue;
+
+            Console.WriteLine($"[{provider.Name}] (provider: {provider.Id})");
+
+            foreach (var model in modelsToShow.OrderBy(m => m.Name))
+            {
+                var costInfo = (model.InputCost ?? 0) == 0 && (model.OutputCost ?? 0) == 0
+                    ? "[FREE]"
+                    : $"${model.InputCost:F2}/${model.OutputCost:F2}";
+                Console.WriteLine($"   {model.Name,-40} {costInfo,-12} (model: {model.Id})");
+            }
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("-".PadRight(70, '-'));
+        Console.WriteLine("Usage: ChatClientUsage -p <provider> -m <model>");
+        Console.WriteLine("Example: ChatClientUsage -p chutes -m openai/gpt-oss-20b");
+        return;
+    }
+
+    // Show selected model info
+    if (providerId != null && modelId != null)
+    {
+        Console.WriteLine($"Using model: {providerId}/{modelId}");
+    }
+    else
+    {
+        Console.WriteLine("Using default model (use -p and -m to specify a model)");
+        Console.WriteLine("Tip: Run with --list-models --free to see free models");
+    }
+    Console.WriteLine();
+
+    // Create model reference if specified
+    ModelReference? modelRef = (providerId != null && modelId != null)
+        ? new ModelReference { ProviderId = providerId, ModelId = modelId }
+        : null;
 
     // Example 1: Basic IChatClient usage
     Console.WriteLine("1. Creating IChatClient from OpenCode client...");
-    IChatClient chatClient = openCodeClient.AsChatClient();
+    IChatClient chatClient = openCodeClient.AsChatClient(model: modelRef);
     var openCodeChatClient = chatClient as OpenCodeChatClient;
     Console.WriteLine($"   Provider: {openCodeChatClient?.Metadata.ProviderName ?? "OpenCode"}");
+    if (modelRef != null)
+    {
+        Console.WriteLine($"   Model: {modelRef.ProviderId}/{modelRef.ModelId}");
+    }
     Console.WriteLine();
 
     // Example 2: Send a simple message
@@ -40,7 +153,8 @@ try
     };
 
     var tutorResponse = await chatClient.GetResponseAsync(conversation);
-    Console.WriteLine($"   Tutor: {tutorResponse.Messages[0].Text?.Substring(0, Math.Min(150, tutorResponse.Messages[0].Text?.Length ?? 0))}...");
+    var tutorText = tutorResponse.Messages[0].Text ?? "";
+    Console.WriteLine($"   Tutor: {tutorText.Substring(0, Math.Min(150, tutorText.Length))}...");
     Console.WriteLine();
 
     // Example 4: Streaming responses
@@ -53,7 +167,7 @@ try
     };
 
     // Create a new chat client for streaming (to get fresh session)
-    var streamChatClient = openCodeClient.AsChatClient();
+    var streamChatClient = openCodeClient.AsChatClient(model: modelRef);
 
     await foreach (var update in streamChatClient.GetStreamingResponseAsync(streamMessages))
     {
@@ -70,18 +184,26 @@ try
     }
     Console.WriteLine();
 
-    // Example 5: Using with specific session
+    // Example 5: Using with specific session and model
     Console.WriteLine("5. Using IChatClient with specific session...");
-    var session = await openCodeClient.CreateSessionAsync();
-    var sessionChatClient = openCodeClient.AsChatClient(session.Id);
+    var session = await openCodeClient.CreateSessionAsync(directory: directory);
+
+    // Initialize session with model if specified
+    if (modelRef != null)
+    {
+        await openCodeClient.InitializeSessionAsync(session.Id, InitSessionRequest.FromModel(modelRef), directory);
+    }
+
+    var sessionChatClient = openCodeClient.AsChatClient(session.Id, model: modelRef);
 
     var sessionResponse = await sessionChatClient.GetResponseAsync([
-        new ChatMessage(ChatRole.User, "What's my session ID?")
+        new ChatMessage(ChatRole.User, "Say hello and tell me your name (or model name if you know it).")
     ]);
-    Console.WriteLine($"   Response: {sessionResponse.Messages[0].Text?.Substring(0, Math.Min(100, sessionResponse.Messages[0].Text?.Length ?? 0))}...");
+    var sessionText = sessionResponse.Messages[0].Text ?? "";
+    Console.WriteLine($"   Response: {sessionText.Substring(0, Math.Min(100, sessionText.Length))}...");
 
     // Clean up session
-    await openCodeClient.DeleteSessionAsync(session.Id);
+    await openCodeClient.DeleteSessionAsync(session.Id, directory);
     Console.WriteLine("   Session cleaned up.");
     Console.WriteLine();
 
@@ -90,23 +212,22 @@ try
     var underlyingClient = chatClient.GetService(typeof(IOpenCodeClient)) as IOpenCodeClient;
     if (underlyingClient is not null)
     {
-        var config = await underlyingClient.GetConfigAsync();
-        Console.WriteLine($"   OpenCode version: {config.Version}");
+        var config = await underlyingClient.GetConfigAsync(directory);
+        if (config.TryGetValue("version", out var ver))
+        {
+            Console.WriteLine($"   OpenCode version: {ver}");
+        }
     }
     Console.WriteLine();
 
-    // Example 7: Using session scope with IChatClient
-    Console.WriteLine("7. Session scope with IChatClient...");
-    await using (var scope = await openCodeClient.CreateSessionScopeAsync())
-    {
-        var scopeChatClient = scope.AsChatClient(openCodeClient);
-        var scopeResponse = await scopeChatClient.GetResponseAsync([
-            new ChatMessage(ChatRole.User, "Hello from scoped session!")
-        ]);
-        Console.WriteLine($"   Session ID: {scope.SessionId}");
-        Console.WriteLine($"   Response: {scopeResponse.Messages[0].Text?.Substring(0, Math.Min(80, scopeResponse.Messages[0].Text?.Length ?? 0))}...");
-    }
-    Console.WriteLine("   Session cleaned up automatically.");
+    // Example 7: Quick chat with model selection
+    Console.WriteLine("7. Quick chat demonstration...");
+    var quickChatClient = openCodeClient.AsChatClient(model: modelRef);
+    var quickResponse = await quickChatClient.GetResponseAsync([
+        new ChatMessage(ChatRole.User, "What's the capital of France? One word answer.")
+    ]);
+    Console.WriteLine($"   Q: What's the capital of France?");
+    Console.WriteLine($"   A: {quickResponse.Messages[0].Text}");
     Console.WriteLine();
 
     Console.WriteLine("All examples completed successfully!");
@@ -127,4 +248,37 @@ catch (OpenCodeApiException ex)
 catch (Exception ex)
 {
     Console.WriteLine($"ERROR: {ex.Message}");
+}
+
+static void ShowHelp()
+{
+    Console.WriteLine("LionFire.OpenCode.Serve - IChatClient Integration Example");
+    Console.WriteLine();
+    Console.WriteLine("Usage: ChatClientUsage [options]");
+    Console.WriteLine();
+    Console.WriteLine("Options:");
+    Console.WriteLine("  -d, --directory <path>  Working directory for sessions");
+    Console.WriteLine("  -u, --url <url>         OpenCode server URL (default: http://localhost:9123)");
+    Console.WriteLine("  -p, --provider <id>     Provider ID (e.g., chutes, opencode, groq)");
+    Console.WriteLine("  -m, --model <id>        Model ID (e.g., openai/gpt-oss-20b, gpt-5-nano)");
+    Console.WriteLine("  -l, --list-models       List all available providers and models");
+    Console.WriteLine("  --free                  Only show free models (use with --list-models)");
+    Console.WriteLine("  -h, --help              Show this help message");
+    Console.WriteLine();
+    Console.WriteLine("Examples:");
+    Console.WriteLine("  ChatClientUsage                                    # Use default model");
+    Console.WriteLine("  ChatClientUsage --list-models                      # List all models");
+    Console.WriteLine("  ChatClientUsage --list-models --free               # List only free models");
+    Console.WriteLine("  ChatClientUsage -p chutes -m openai/gpt-oss-20b    # Use free GPT-OSS model");
+    Console.WriteLine("  ChatClientUsage -p opencode -m gpt-5-nano          # Use free GPT-5 Nano model");
+    Console.WriteLine("  ChatClientUsage -p groq -m llama-3.1-8b-instant    # Use Groq Llama model");
+    Console.WriteLine();
+    Console.WriteLine("Popular FREE models (no API key required for some):");
+    Console.WriteLine("  chutes    openai/gpt-oss-20b                  GPT-OSS 20B (reasoning, tool use)");
+    Console.WriteLine("  chutes    Alibaba-NLP/Tongyi-DeepResearch-30B-A3B  Tongyi DeepResearch");
+    Console.WriteLine("  chutes    unsloth/gemma-3-4b-it               Gemma 3 4B (vision)");
+    Console.WriteLine("  opencode  gpt-5-nano                          GPT-5 Nano (reasoning)");
+    Console.WriteLine();
+    Console.WriteLine("Note: Free models may still require provider authentication.");
+    Console.WriteLine("      Run: opencode auth login <provider>");
 }
