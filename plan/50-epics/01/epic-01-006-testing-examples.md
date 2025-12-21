@@ -5,7 +5,7 @@ greenlit: true
 # Epic 01-006: Testing and Examples
 
 **Phase**: 01 - MVP Foundation
-**Status**: Not Started
+**Status**: Implemented in v2.0
 **Estimated Effort**: 3-4 days
 **Priority**: High
 

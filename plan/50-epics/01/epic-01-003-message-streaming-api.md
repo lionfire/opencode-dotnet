@@ -5,7 +5,7 @@ greenlit: true
 # Epic 01-003: Message and Streaming API
 
 **Phase**: 01 - MVP Foundation
-**Status**: Not Started
+**Status**: Implemented in v2.0
 **Estimated Effort**: 1 week
 **Priority**: Critical (core functionality)
 
