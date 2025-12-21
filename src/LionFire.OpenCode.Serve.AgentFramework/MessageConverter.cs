@@ -9,25 +9,28 @@ namespace LionFire.OpenCode.Serve.AgentFramework;
 public static class MessageConverter
 {
     /// <summary>
-    /// Converts an OpenCode <see cref="Message"/> to a <see cref="ChatMessage"/>.
+    /// Converts an OpenCode <see cref="MessageWithParts"/> to a <see cref="ChatMessage"/>.
     /// </summary>
-    /// <param name="message">The OpenCode message to convert.</param>
+    /// <param name="messageWithParts">The OpenCode message with parts to convert.</param>
     /// <returns>A ChatMessage with equivalent content.</returns>
-    public static ChatMessage ToChatMessage(Message message)
+    public static ChatMessage ToChatMessage(MessageWithParts messageWithParts)
     {
-        ArgumentNullException.ThrowIfNull(message);
+        ArgumentNullException.ThrowIfNull(messageWithParts);
 
         var chatMessage = new ChatMessage
         {
-            Role = ToChatRole(message.Role)
+            Role = ToChatRole(messageWithParts.Message?.Role ?? "assistant")
         };
 
-        foreach (var part in message.Parts)
+        if (messageWithParts.Parts is not null)
         {
-            var content = ToAIContent(part);
-            if (content is not null)
+            foreach (var part in messageWithParts.Parts)
             {
-                chatMessage.Contents.Add(content);
+                var content = ToAIContent(part);
+                if (content is not null)
+                {
+                    chatMessage.Contents.Add(content);
+                }
             }
         }
 
@@ -35,19 +38,19 @@ public static class MessageConverter
     }
 
     /// <summary>
-    /// Converts a <see cref="ChatMessage"/> to OpenCode message parts.
+    /// Converts a <see cref="ChatMessage"/> to OpenCode part inputs.
     /// </summary>
     /// <param name="message">The ChatMessage to convert.</param>
-    /// <returns>A list of message parts representing the content.</returns>
-    public static IReadOnlyList<MessagePart> ToMessageParts(ChatMessage message)
+    /// <returns>A list of part inputs representing the content.</returns>
+    public static IReadOnlyList<PartInput> ToPartInputs(ChatMessage message)
     {
         ArgumentNullException.ThrowIfNull(message);
 
-        var parts = new List<MessagePart>();
+        var parts = new List<PartInput>();
 
         foreach (var content in message.Contents)
         {
-            var part = ToMessagePart(content);
+            var part = ToPartInput(content);
             if (part is not null)
             {
                 parts.Add(part);
@@ -58,98 +61,95 @@ public static class MessageConverter
     }
 
     /// <summary>
-    /// Converts an OpenCode <see cref="Message"/> to a <see cref="ChatResponse"/>.
+    /// Converts an OpenCode <see cref="MessageWithParts"/> to a <see cref="ChatResponse"/>.
     /// </summary>
-    /// <param name="message">The OpenCode message to convert.</param>
+    /// <param name="messageWithParts">The OpenCode message with parts to convert.</param>
     /// <returns>A ChatResponse containing the message.</returns>
-    public static ChatResponse ToChatResponse(Message message)
+    public static ChatResponse ToChatResponse(MessageWithParts messageWithParts)
     {
-        ArgumentNullException.ThrowIfNull(message);
+        ArgumentNullException.ThrowIfNull(messageWithParts);
 
-        var chatMessage = ToChatMessage(message);
+        var chatMessage = ToChatMessage(messageWithParts);
+        var message = messageWithParts.Message;
 
         return new ChatResponse(chatMessage)
         {
-            ResponseId = message.Id,
-            CreatedAt = message.CreatedAt
+            ResponseId = message?.Id ?? string.Empty,
+            CreatedAt = message?.Time is not null
+                ? DateTimeOffset.FromUnixTimeMilliseconds(message.Time.Created)
+                : DateTimeOffset.UtcNow
         };
     }
 
     /// <summary>
-    /// Converts an OpenCode <see cref="MessageRole"/> to a <see cref="ChatRole"/>.
+    /// Converts an OpenCode message role string to a <see cref="ChatRole"/>.
     /// </summary>
-    /// <param name="role">The OpenCode message role.</param>
+    /// <param name="role">The OpenCode message role string.</param>
     /// <returns>The equivalent ChatRole.</returns>
-    public static ChatRole ToChatRole(MessageRole role)
+    public static ChatRole ToChatRole(string role)
     {
-        return role switch
+        return role.ToLowerInvariant() switch
         {
-            MessageRole.User => ChatRole.User,
-            MessageRole.Assistant => ChatRole.Assistant,
-            MessageRole.System => ChatRole.System,
-            MessageRole.Tool => ChatRole.Tool,
+            "user" => ChatRole.User,
+            "assistant" => ChatRole.Assistant,
+            "system" => ChatRole.System,
+            "tool" => ChatRole.Tool,
             _ => ChatRole.Assistant
         };
     }
 
     /// <summary>
-    /// Converts a <see cref="ChatRole"/> to an OpenCode <see cref="MessageRole"/>.
+    /// Converts a <see cref="ChatRole"/> to an OpenCode message role string.
     /// </summary>
     /// <param name="role">The ChatRole to convert.</param>
-    /// <returns>The equivalent MessageRole.</returns>
-    public static MessageRole ToMessageRole(ChatRole role)
+    /// <returns>The equivalent role string.</returns>
+    public static string ToMessageRole(ChatRole role)
     {
         if (role == ChatRole.User)
-            return MessageRole.User;
+            return "user";
         if (role == ChatRole.Assistant)
-            return MessageRole.Assistant;
+            return "assistant";
         if (role == ChatRole.System)
-            return MessageRole.System;
+            return "system";
         if (role == ChatRole.Tool)
-            return MessageRole.Tool;
+            return "tool";
 
-        return MessageRole.User;
+        return "user";
     }
 
     /// <summary>
-    /// Converts an OpenCode <see cref="MessagePart"/> to an <see cref="AIContent"/>.
+    /// Converts an OpenCode <see cref="Part"/> to an <see cref="AIContent"/>.
     /// </summary>
     /// <param name="part">The message part to convert.</param>
     /// <returns>The equivalent AIContent, or null if the part type is not supported.</returns>
-    public static AIContent? ToAIContent(MessagePart part)
+    public static AIContent? ToAIContent(Part part)
     {
-        return part switch
+        if (part.IsTextPart)
         {
-            TextPart textPart => new TextContent(textPart.Text),
-            ToolUsePart toolUse => new FunctionCallContent(
-                toolUse.ToolId,
-                toolUse.ToolName,
-                toolUse.Input as IDictionary<string, object?>),
-            ToolResultPart toolResult => new FunctionResultContent(
-                toolResult.ToolId,
-                toolResult.Output),
-            _ => null
-        };
+            return new TextContent(part.Text ?? string.Empty);
+        }
+
+        if (part.IsToolCompleted && part.CallId is not null)
+        {
+            return new FunctionResultContent(part.CallId, part.OutputString);
+        }
+
+        return null;
     }
 
     /// <summary>
-    /// Converts an <see cref="AIContent"/> to an OpenCode <see cref="MessagePart"/>.
+    /// Converts an <see cref="AIContent"/> to an OpenCode <see cref="PartInput"/>.
     /// </summary>
     /// <param name="content">The AI content to convert.</param>
-    /// <returns>The equivalent MessagePart, or null if the content type is not supported.</returns>
-    public static MessagePart? ToMessagePart(AIContent content)
+    /// <returns>The equivalent PartInput, or null if the content type is not supported.</returns>
+    public static PartInput? ToPartInput(AIContent content)
     {
         return content switch
         {
-            TextContent textContent => new TextPart(textContent.Text ?? string.Empty),
-            FunctionCallContent functionCall => new ToolUsePart(
-                functionCall.CallId,
-                functionCall.Name,
-                functionCall.Arguments as object),
-            FunctionResultContent functionResult => new ToolResultPart(
-                functionResult.CallId,
-                functionResult.Result?.ToString()),
-            _ => new TextPart(content.ToString() ?? string.Empty)
+            TextContent textContent => PartInput.TextInput(textContent.Text ?? string.Empty),
+            FunctionCallContent => null, // Tool calls are handled differently in OpenCode
+            FunctionResultContent => null, // Tool results are handled differently in OpenCode
+            _ => PartInput.TextInput(content.ToString() ?? string.Empty)
         };
     }
 
@@ -158,40 +158,9 @@ public static class MessageConverter
     /// </summary>
     /// <param name="messages">The messages to convert.</param>
     /// <returns>A list of converted ChatMessages.</returns>
-    public static IReadOnlyList<ChatMessage> ToChatMessages(IEnumerable<Message> messages)
+    public static IReadOnlyList<ChatMessage> ToChatMessages(IEnumerable<MessageWithParts> messages)
     {
         ArgumentNullException.ThrowIfNull(messages);
         return messages.Select(ToChatMessage).ToList();
-    }
-
-    /// <summary>
-    /// Converts an OpenCode <see cref="MessageUpdate"/> to a <see cref="ChatResponseUpdate"/>.
-    /// </summary>
-    /// <param name="update">The message update to convert.</param>
-    /// <returns>A ChatResponseUpdate, or null if there's no content.</returns>
-    public static ChatResponseUpdate? ToChatResponseUpdate(MessageUpdate update)
-    {
-        ArgumentNullException.ThrowIfNull(update);
-
-        if (update.Delta is not null)
-        {
-            return new ChatResponseUpdate(ChatRole.Assistant, update.Delta)
-            {
-                MessageId = update.MessageId,
-                FinishReason = update.Done ? ChatFinishReason.Stop : null
-            };
-        }
-
-        if (update.Done)
-        {
-            return new ChatResponseUpdate
-            {
-                Role = ChatRole.Assistant,
-                MessageId = update.MessageId,
-                FinishReason = ChatFinishReason.Stop
-            };
-        }
-
-        return null;
     }
 }
