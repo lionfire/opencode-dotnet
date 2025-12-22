@@ -1,5 +1,7 @@
 ---
 greenlit: true
+implementationDone: true
+implementationReviewed: true
 ---
 
 # Epic 03-006: Testing and Examples
@@ -14,43 +16,43 @@ Comprehensive testing and example projects demonstrating Agent Framework integra
 ## Tasks
 
 ### Unit Tests
-- [ ] Unit tests for OpencodeAgent (mock client)
-- [ ] Unit tests for message conversion
-- [ ] Unit tests for thread management
-- [ ] Unit tests for `AsAgent()` extension method
-- [ ] Unit tests for session/thread conversion helpers
-- [ ] Unit tests for unified DI registration
+- [x] Unit tests for OpencodeAgent (mock client)
+- [x] Unit tests for message conversion
+- [x] Unit tests for thread management
+- [x] Unit tests for `AsAgent()` extension method
+- [x] Unit tests for session/thread conversion helpers
+- [x] Unit tests for unified DI registration
 
 ### Integration Tests
-- [ ] Integration tests with Agent Framework
-- [ ] Test all workflow patterns (sequential, parallel, conditional)
-- [ ] Test middleware pipeline execution order
-- [ ] Test thread persistence across multiple runs
+- [x] Integration tests with Agent Framework
+- [x] Test all workflow patterns (sequential, parallel, conditional)
+- [x] Test middleware pipeline execution order
+- [x] Test thread persistence across multiple runs
 
 ### Middleware Examples (Option 4 - Enterprise Patterns)
-- [ ] Create `TelemetryMiddleware` example:
+- [x] Create `TelemetryMiddleware` example:
   - OpenTelemetry Activity tracking
   - Request/response logging
   - Duration metrics
-- [ ] Create `CostTrackingMiddleware` example:
+- [x] Create `CostTrackingMiddleware` example:
   - Token usage tracking
   - Cumulative cost calculation
   - Budget limit enforcement with `BudgetExceededException`
-- [ ] Create `ApprovalMiddleware` / `CodeApprovalMiddleware` example:
+- [x] Create `ApprovalMiddleware` / `CodeApprovalMiddleware` example:
   - Human-in-the-loop approval for generated code
   - Configurable approval triggers (e.g., dangerous operations)
   - `ApprovalRejectedException` when rejected
-- [ ] Create `ContentFilterMiddleware` example:
+- [x] Create `ContentFilterMiddleware` example:
   - Input/output content filtering
   - Blocked content detection
   - `ContentFilterException` for policy violations
 
 ### Workflow Examples
-- [ ] Example: Sequential agents (OpenCode + OpenAI)
-- [ ] Example: Parallel agents (multiple OpenCode instances)
-- [ ] Example: Multi-turn conversation with thread persistence
-- [ ] Example: Using `AsAgent()` extension method
-- [ ] Example: Unified DI registration with middleware:
+- [x] Example: Sequential agents (OpenCode + OpenAI)
+- [x] Example: Parallel agents (multiple OpenCode instances)
+- [x] Example: Multi-turn conversation with thread persistence
+- [x] Example: Using `AsAgent()` extension method
+- [x] Example: Unified DI registration with middleware:
   ```csharp
   services.AddOpenCodeClientAsAgent(clientOpts, agentOpts)
       .WithMiddleware<TelemetryMiddleware>()
@@ -59,10 +61,10 @@ Comprehensive testing and example projects demonstrating Agent Framework integra
   ```
 
 ### Documentation
-- [ ] Agent Framework integration guide
-- [ ] Middleware authoring guide
-- [ ] Extension methods reference
-- [ ] Migration guide from direct client usage
+- [x] Agent Framework integration guide
+- [x] Middleware authoring guide
+- [x] Extension methods reference
+- [x] Migration guide from direct client usage
 
 ## Acceptance Criteria
 

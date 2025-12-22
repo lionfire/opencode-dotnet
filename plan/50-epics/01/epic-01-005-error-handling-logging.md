@@ -1,5 +1,7 @@
 ---
 greenlit: true
+implementationDone: true
+implementationReviewed: true
 ---
 
 # Epic 01-005: Error Handling and Logging
@@ -18,51 +20,51 @@ Implement comprehensive exception hierarchy, error message formatting with troub
 ## Implementation Tasks
 
 ### Exception Hierarchy
-- [ ] Create OpencodeException base class
-- [ ] OpencodeApiException (API errors with status code)
-- [ ] OpencodeNotFoundException (404)
-- [ ] OpencodeConflictException (409)
-- [ ] OpencodeServerException (5xx)
-- [ ] OpencodeConnectionException (can't reach server)
-- [ ] OpencodeTimeoutException (request timeout)
+- [x] Create OpencodeException base class
+- [x] OpencodeApiException (API errors with status code)
+- [x] OpencodeNotFoundException (404)
+- [x] OpencodeConflictException (409)
+- [x] OpencodeServerException (5xx)
+- [x] OpencodeConnectionException (can't reach server)
+- [x] OpencodeTimeoutException (request timeout)
 
 ### Error Message Quality
-- [ ] Include troubleshooting hints in messages
-- [ ] "Is opencode serve running?" for connection errors
-- [ ] "Try increasing timeout" for timeout errors
-- [ ] Include request ID when available
-- [ ] Structured error data in exception properties
+- [x] Include troubleshooting hints in messages
+- [x] "Is opencode serve running?" for connection errors
+- [x] "Try increasing timeout" for timeout errors
+- [x] Include request ID when available
+- [x] Structured error data in exception properties
 
 ### Health Check API
-- [ ] Implement PingAsync() method
-- [ ] Try GET /config or GET /session as lightweight check
-- [ ] Return bool or throw with clear message
-- [ ] Include server version in success response
+- [x] Implement PingAsync() method
+- [x] Try GET /config or GET /session as lightweight check
+- [x] Return bool or throw with clear message
+- [x] Include server version in success response
 
 ### Retry Logic
-- [ ] Implement retry policy with exponential backoff
-- [ ] Configurable max attempts (default: 3)
-- [ ] Configurable base delay (default: 2s)
-- [ ] Retry on transient failures (5xx, timeouts)
-- [ ] Don't retry on client errors (4xx except 429)
-- [ ] Log retry attempts
+- [x] Implement retry policy with exponential backoff
+- [x] Configurable max attempts (default: 3)
+- [x] Configurable base delay (default: 2s)
+- [x] Retry on transient failures (5xx, timeouts)
+- [x] Don't retry on client errors (4xx except 429)
+- [x] Log retry attempts
 
 ### Logging Integration
-- [ ] ILogger integration via constructor
-- [ ] Log HTTP requests at Debug level
-- [ ] Log HTTP responses at Debug level
-- [ ] Log errors at Error level with full exception
-- [ ] Log retries at Warning level
-- [ ] Structured logging with correlation IDs
-- [ ] Don't log sensitive data (tokens, file content)
+- [x] ILogger integration via constructor
+- [x] Log HTTP requests at Debug level
+- [x] Log HTTP responses at Debug level
+- [x] Log errors at Error level with full exception
+- [x] Log retries at Warning level
+- [x] Structured logging with correlation IDs
+- [x] Don't log sensitive data (tokens, file content)
 
 ## Testing Tasks
 
-- [ ] Test all exception types thrown correctly
-- [ ] Test error message quality
-- [ ] Test retry logic (mock failing then succeeding)
-- [ ] Test health check with server running/not running
-- [ ] Test logging output
+- [x] Test all exception types thrown correctly
+- [x] Test error message quality
+- [x] Test retry logic (mock failing then succeeding)
+- [x] Test health check with server running/not running
+- [x] Test logging output
 
 ## Dependencies
 
@@ -70,9 +72,9 @@ Implement comprehensive exception hierarchy, error message formatting with troub
 
 ## Acceptance Criteria
 
-- [ ] Complete exception hierarchy
-- [ ] Health check works reliably
-- [ ] Retry logic configurable and functional
-- [ ] Error messages include helpful hints
-- [ ] Logging doesn't expose sensitive data
-- [ ] >85% code coverage for error paths
+- [x] Complete exception hierarchy
+- [x] Health check works reliably
+- [x] Retry logic configurable and functional
+- [x] Error messages include helpful hints
+- [x] Logging doesn't expose sensitive data
+- [x] >85% code coverage for error paths

@@ -1,5 +1,7 @@
 ---
 greenlit: true
+implementationDone: true
+implementationReviewed: true
 ---
 
 # Epic 03-004: Streaming Integration
@@ -13,13 +15,13 @@ Implement streaming responses via Agent Framework's IAsyncEnumerable<AgentRunRes
 
 ## Tasks
 
-- [ ] Implement RunStreamingAsync() in OpencodeAgent
-- [ ] Convert OpenCode streaming chunks to AgentRunResponseUpdate
-- [ ] Map streaming events (message, error, done)
-- [ ] Update thread state as streaming completes
-- [ ] Handle cancellation
-- [ ] Test streaming performance (within 5% of native)
-- [ ] Test error handling in streams
+- [x] Implement RunStreamingAsync() in OpencodeAgent
+- [x] Convert OpenCode streaming chunks to AgentRunResponseUpdate
+- [x] Map streaming events (message, error, done)
+- [x] Update thread state as streaming completes
+- [x] Handle cancellation
+- [x] Test streaming performance (within 5% of native)
+- [x] Test error handling in streams
 
 ## Acceptance Criteria
 

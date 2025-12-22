@@ -13,19 +13,19 @@ Create example projects demonstrating all major SDK use cases for different audi
 
 ## Tasks
 
-- [ ] Example: Basic session and message (console app)
-- [ ] Example: Streaming responses with progress
-- [ ] Example: Session scope and auto-cleanup
-- [ ] Example: Tool approval workflow
-- [ ] Example: File operations
-- [ ] Example: ASP.NET Core integration with DI
-- [ ] Example: Agent Framework sequential workflow
-- [ ] Example: Agent Framework parallel agents
-- [ ] Example: Multi-turn conversation with persistence
-- [ ] Example: Error handling patterns
-- [ ] Example: Custom resilience policies
-- [ ] Example: OpenTelemetry integration
-- [ ] README for each example with run instructions
+- [x] Example: Basic session and message (console app)
+- [x] Example: Streaming responses with progress
+- [x] Example: Session scope and auto-cleanup
+- [x] Example: Tool approval workflow
+- [x] Example: File operations
+- [x] Example: ASP.NET Core integration with DI
+- [x] Example: Agent Framework sequential workflow
+- [x] Example: Agent Framework parallel agents
+- [x] Example: Multi-turn conversation with persistence
+- [x] Example: Error handling patterns
+- [x] Example: Custom resilience policies
+- [x] Example: OpenTelemetry integration
+- [x] README for each example with run instructions
 
 ## Acceptance Criteria
 

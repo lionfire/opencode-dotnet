@@ -1,5 +1,7 @@
 ---
 greenlit: true
+implementationDone: true
+implementationReviewed: true
 ---
 
 # Epic 03-005: DI Extensions and Builder Pattern
@@ -14,14 +16,14 @@ Create dependency injection extensions and fluent builder for OpencodeAgent conf
 ## Tasks
 
 ### Core DI Extensions
-- [ ] Create ServiceCollectionExtensions for Agent Framework
-- [ ] AddOpencodeAgent(IServiceCollection) extension
-- [ ] AddOpencodeAgentFactory() for named agents
-- [ ] Integration with existing AddOpenCodeClient()
-- [ ] IOptions<OpencodeAgentOptions> support
+- [x] Create ServiceCollectionExtensions for Agent Framework
+- [x] AddOpencodeAgent(IServiceCollection) extension
+- [x] AddOpencodeAgentFactory() for named agents
+- [x] Integration with existing AddOpenCodeClient()
+- [x] IOptions<OpencodeAgentOptions> support
 
 ### Unified Registration (Option 4 - Enhanced Client Interfaces)
-- [ ] Implement `AddOpenCodeClientAsAgent()` - single registration for both:
+- [x] Implement `AddOpenCodeClientAsAgent()` - single registration for both:
   ```csharp
   services.AddOpenCodeClientAsAgent(
       clientOptions => { clientOptions.BaseUrl = "http://localhost:9123"; },
@@ -30,30 +32,30 @@ Create dependency injection extensions and fluent builder for OpencodeAgent conf
           agentOptions.EnableTelemetry = true;
       });
   ```
-- [ ] Register IOpenCodeClient as singleton
-- [ ] Register AIAgent as singleton (using AsAgent() internally)
-- [ ] Both resolvable from same container:
+- [x] Register IOpenCodeClient as singleton
+- [x] Register AIAgent as singleton (using AsAgent() internally)
+- [x] Both resolvable from same container:
   ```csharp
   var client = sp.GetRequiredService<IOpenCodeClient>();  // Direct client
   var agent = sp.GetRequiredService<AIAgent>();           // Agent wrapper
   ```
 
 ### Builder Pattern
-- [ ] Create OpencodeAgentBuilder fluent API
-- [ ] Configure agent options via builder
-- [ ] Add middleware registration to builder:
+- [x] Create OpencodeAgentBuilder fluent API
+- [x] Configure agent options via builder
+- [x] Add middleware registration to builder:
   ```csharp
   services.AddOpenCodeClientAsAgent(...)
       .WithMiddleware<TelemetryMiddleware>()
       .WithMiddleware<CostTrackingMiddleware>();
   ```
-- [ ] Support keyed services for multiple agents
+- [x] Support keyed services for multiple agents
 
 ### Testing
-- [ ] Test DI registration patterns
-- [ ] Test unified registration resolves both interfaces
-- [ ] Test middleware registration via DI
-- [ ] Test keyed services for named agents
+- [x] Test DI registration patterns
+- [x] Test unified registration resolves both interfaces
+- [x] Test middleware registration via DI
+- [x] Test keyed services for named agents
 
 ## Acceptance Criteria
 

@@ -1,5 +1,7 @@
 ---
 greenlit: true
+implementationDone: true
+implementationReviewed: true
 ---
 
 # Epic 01-004: File Operations, Permissions, and Command APIs

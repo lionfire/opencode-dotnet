@@ -1,5 +1,7 @@
 ---
 greenlit: true
+implementationDone: true
+implementationReviewed: true
 ---
 
 # Epic 03-001: OpencodeAgent Core Implementation
@@ -14,26 +16,26 @@ Implement OpencodeAgent class extending Microsoft Agent Framework's AIAgent abst
 ## Tasks
 
 ### Core Agent Implementation
-- [ ] Add Microsoft.Agents.AI.Abstractions dependency
-- [ ] Add Microsoft.Extensions.AI dependency
-- [ ] Create OpencodeAgent class extending AIAgent
-- [ ] Implement GetNewThread() → returns OpencodeAgentThread
-- [ ] Implement DeserializeThread(JsonElement) → OpencodeAgentThread
-- [ ] Implement RunAsync(IEnumerable<ChatMessage>, AgentThread?, AgentRunOptions?)
-- [ ] Implement RunStreamingAsync() → IAsyncEnumerable<AgentRunResponseUpdate>
-- [ ] Properties: Id, Name, Description, DisplayName
-- [ ] GetService<T>() for service resolution
-- [ ] Constructor accepting IOpenCodeClient
-- [ ] Constructor accepting IOpenCodeClient + OpencodeAgentOptions
+- [x] Add Microsoft.Agents.AI.Abstractions dependency
+- [x] Add Microsoft.Extensions.AI dependency
+- [x] Create OpencodeAgent class extending AIAgent
+- [x] Implement GetNewThread() → returns OpencodeAgentThread
+- [x] Implement DeserializeThread(JsonElement) → OpencodeAgentThread
+- [x] Implement RunAsync(IEnumerable<ChatMessage>, AgentThread?, AgentRunOptions?)
+- [x] Implement RunStreamingAsync() → IAsyncEnumerable<AgentRunResponseUpdate>
+- [x] Properties: Id, Name, Description, DisplayName
+- [x] GetService<T>() for service resolution
+- [x] Constructor accepting IOpenCodeClient
+- [x] Constructor accepting IOpenCodeClient + OpencodeAgentOptions
 
 ### Extension Methods (Option 4 - Enhanced Client Interfaces)
-- [ ] Create OpenCodeClientExtensions static class
-- [ ] Implement `AsAgent()` extension on IOpenCodeClient
+- [x] Create OpenCodeClientExtensions static class
+- [x] Implement `AsAgent()` extension on IOpenCodeClient
   ```csharp
   public static AIAgent AsAgent(this IOpenCodeClient client, string? name = null, string? description = null)
   ```
-- [ ] Implement `AsAgent(OpencodeAgentOptions)` overload
-- [ ] Implement `WithMiddleware()` fluent extension for agent wrapping
+- [x] Implement `AsAgent(OpencodeAgentOptions)` overload
+- [x] Implement `WithMiddleware()` fluent extension for agent wrapping
   ```csharp
   var agent = client.AsAgent().WithMiddleware(new TelemetryMiddleware());
   ```
