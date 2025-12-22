@@ -165,7 +165,7 @@ public record Part
     /// Raw JSON data for properties not explicitly mapped.
     /// </summary>
     [JsonExtensionData]
-    public Dictionary<string, object?>? ExtensionData { get; init; }
+    public Dictionary<string, object?>? ExtensionData { get; set; }
 
     /// <summary>
     /// Gets the text content for this part (convenience property).
@@ -268,7 +268,7 @@ public record PartInput
     /// Raw JSON data for properties not explicitly mapped.
     /// </summary>
     [JsonExtensionData]
-    public Dictionary<string, object?>? ExtensionData { get; init; }
+    public Dictionary<string, object?>? ExtensionData { get; set; }
 
     /// <summary>
     /// Creates a text part input.

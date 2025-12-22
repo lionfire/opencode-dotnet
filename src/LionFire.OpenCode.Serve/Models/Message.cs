@@ -124,7 +124,7 @@ public record Message
     /// Raw JSON data for properties not explicitly mapped.
     /// </summary>
     [JsonExtensionData]
-    public Dictionary<string, object?>? ExtensionData { get; init; }
+    public Dictionary<string, object?>? ExtensionData { get; set; }
 
     /// <summary>
     /// Checks if this is a user message.
@@ -338,7 +338,7 @@ public record MessageError
     /// Raw JSON data for properties not explicitly mapped.
     /// </summary>
     [JsonExtensionData]
-    public Dictionary<string, object?>? ExtensionData { get; init; }
+    public Dictionary<string, object?>? ExtensionData { get; set; }
 }
 
 /// <summary>
