@@ -427,8 +427,8 @@ services.AddOpenTelemetry()
 - **Phases:** 4
 - **Epics:** 24
 - **Progress:** 92.3% (632/685 tasks)
-- **Greenlit:** 7
-- **Done:** 17
+- **Greenlit:** 4
+- **Done:** 18
 - **Needs Attention:** 0
 
 
@@ -460,10 +460,10 @@ services.AddOpenTelemetry()
 | ✅ | 1 | 4 | File Operations, Permissions, and Command APIs | 26/26 | 100% |
 | ✅ | 1 | 5 | Error Handling and Logging | 40/40 | 100% |
 | ✅ | 1 | 6 | Testing and Examples | 37/37 | 100% |
-| ✅ | 2 | 1 | Source-Generated JSON and AOT | 5/6 | 83% |
+|  | 2 | 1 | Source-Generated JSON and AOT | 5/6 | 83% |
 | ✅ | 2 | 2 | HttpClientFactory and Connection Management | 10/10 | 100% |
 | ✅ | 2 | 3 | Polly Resilience Integration | 8/8 | 100% |
-| ✅ | 2 | 4 | OpenTelemetry Observability | 7/8 | 88% |
+|  | 2 | 4 | OpenTelemetry Observability | 7/8 | 88% |
 | ✅ | 2 | 5 | Advanced API Features | 12/12 | 100% |
 | ✅ | 2 | 6 | Performance Optimization | 9/9 | 100% |
 | ✅ | 3 | 1 | OpencodeAgent Core Implementation | 15/15 | 100% |

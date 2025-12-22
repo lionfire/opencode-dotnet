@@ -1,12 +1,6 @@
-// Status tracking for epics
-// Updated: 2025-12-21
-
 greenlit:
 [
   03-003
-  04-001
-  04-002
-  04-003
   04-004
   04-005
   04-006
@@ -20,10 +14,8 @@ done:
   01-004
   01-005
   01-006
-  02-001
   02-002
   02-003
-  02-004
   02-005
   02-006
   03-001
@@ -31,8 +23,11 @@ done:
   03-004
   03-005
   03-006
+  04-001
+  04-002
+  04-003
 ]
 
-implementationReadyForReview: []
-
-needsAttention: []
+needsAttention:
+[
+]
