@@ -683,6 +683,11 @@ public sealed class OpenCodeClient : IOpenCodeClient
             RecordError(activity, stopwatch, operation, "GET", ex);
             throw new OpenCodeConnectionException($"Failed to connect to OpenCode server at {_httpClient.BaseAddress}", _httpClient.BaseAddress?.ToString(), ex);
         }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            RecordError(activity, stopwatch, operation, "GET", ex);
+            throw OpenCodeTimeoutException.OperationTimedOut(operation, _httpClient.Timeout, ex);
+        }
         catch (Exception ex) when (ex is not OpenCodeException)
         {
             RecordError(activity, stopwatch, operation, "GET", ex);
@@ -779,6 +784,11 @@ public sealed class OpenCodeClient : IOpenCodeClient
             RecordError(activity, stopwatch, operation, "POST", ex);
             throw new OpenCodeApiException($"Failed to parse JSON response from server. URL: {url}. Error: {ex.Message}", System.Net.HttpStatusCode.OK, ex);
         }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            RecordError(activity, stopwatch, operation, "POST", ex);
+            throw OpenCodeTimeoutException.OperationTimedOut(operation, _httpClient.Timeout, ex);
+        }
         catch (Exception ex) when (ex is not OpenCodeException)
         {
             RecordError(activity, stopwatch, operation, "POST", ex);
@@ -828,6 +838,11 @@ public sealed class OpenCodeClient : IOpenCodeClient
         {
             RecordError(activity, stopwatch, operation, "PUT", ex);
             throw new OpenCodeConnectionException($"Failed to connect to OpenCode server at {_httpClient.BaseAddress}", _httpClient.BaseAddress?.ToString(), ex);
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            RecordError(activity, stopwatch, operation, "PUT", ex);
+            throw OpenCodeTimeoutException.OperationTimedOut(operation, _httpClient.Timeout, ex);
         }
         catch (Exception ex) when (ex is not OpenCodeException)
         {
@@ -888,6 +903,11 @@ public sealed class OpenCodeClient : IOpenCodeClient
             RecordError(activity, stopwatch, operation, "PATCH", ex);
             throw new OpenCodeConnectionException($"Failed to connect to OpenCode server at {_httpClient.BaseAddress}", _httpClient.BaseAddress?.ToString(), ex);
         }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            RecordError(activity, stopwatch, operation, "PATCH", ex);
+            throw OpenCodeTimeoutException.OperationTimedOut(operation, _httpClient.Timeout, ex);
+        }
         catch (Exception ex) when (ex is not OpenCodeException)
         {
             RecordError(activity, stopwatch, operation, "PATCH", ex);
@@ -934,6 +954,11 @@ public sealed class OpenCodeClient : IOpenCodeClient
         {
             RecordError(activity, stopwatch, operation, "DELETE", ex);
             throw new OpenCodeConnectionException($"Failed to connect to OpenCode server at {_httpClient.BaseAddress}", _httpClient.BaseAddress?.ToString(), ex);
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
+        {
+            RecordError(activity, stopwatch, operation, "DELETE", ex);
+            throw OpenCodeTimeoutException.OperationTimedOut(operation, _httpClient.Timeout, ex);
         }
         catch (Exception ex) when (ex is not OpenCodeException)
         {
