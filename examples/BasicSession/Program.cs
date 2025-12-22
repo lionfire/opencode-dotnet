@@ -2,6 +2,7 @@
 // Demonstrates creating a session, sending a message, and getting a response
 
 using LionFire.OpenCode.Serve;
+using LionFire.OpenCode.Serve.Exceptions;
 using LionFire.OpenCode.Serve.Models;
 
 Console.WriteLine("LionFire.OpenCode.Serve - Basic Session Example");
@@ -79,10 +80,6 @@ catch (OpenCodeConnectionException ex)
 catch (OpenCodeException ex)
 {
     Console.WriteLine($"❌ Error: {ex.Message}");
-    if (ex.TroubleshootingHint != null)
-    {
-        Console.WriteLine($"Hint: {ex.TroubleshootingHint}");
-    }
 }
 
 Console.WriteLine();

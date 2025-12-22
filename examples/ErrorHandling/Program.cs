@@ -2,6 +2,7 @@
 // Demonstrates proper exception handling patterns and Polly resilience integration
 
 using LionFire.OpenCode.Serve;
+using LionFire.OpenCode.Serve.Exceptions;
 using LionFire.OpenCode.Serve.Extensions;
 using LionFire.OpenCode.Serve.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,8 +30,7 @@ catch (OpenCodeConnectionException ex)
 {
     Console.WriteLine($"  Exception Type: {ex.GetType().Name}");
     Console.WriteLine($"  Message: {ex.Message}");
-    Console.WriteLine($"  Server URL: {ex.ServerUrl}");
-    Console.WriteLine($"  Troubleshooting Hint: {ex.TroubleshootingHint}");
+    Console.WriteLine($"  Server URL: {ex.BaseUrl}");
 }
 Console.WriteLine();
 
@@ -46,7 +46,7 @@ catch (OpenCodeNotFoundException ex)
 {
     Console.WriteLine($"  Exception Type: {ex.GetType().Name}");
     Console.WriteLine($"  Message: {ex.Message}");
-    Console.WriteLine($"  Troubleshooting Hint: {ex.TroubleshootingHint}");
+    Console.WriteLine($"  Status Code: {ex.StatusCode}");
 }
 catch (OpenCodeConnectionException)
 {
@@ -322,7 +322,7 @@ static async Task DemonstrateComprehensiveHandlingAsync()
     {
         // Server not reachable
         Console.WriteLine($"  [Connection Error] {ex.Message}");
-        Console.WriteLine($"  Hint: {ex.TroubleshootingHint}");
+        Console.WriteLine($"  Hint: Ensure 'opencode serve' is running at {ex.BaseUrl}");
         // Action: Show offline mode, queue for retry, alert ops
     }
     catch (OpenCodeNotFoundException ex)
@@ -335,7 +335,7 @@ static async Task DemonstrateComprehensiveHandlingAsync()
     {
         // Operation took too long
         Console.WriteLine($"  [Timeout] {ex.Message} after {ex.Timeout.TotalSeconds}s");
-        Console.WriteLine($"  Hint: {ex.TroubleshootingHint}");
+        Console.WriteLine($"  Hint: Increase timeout in OpenCodeClientOptions or simplify request");
         // Action: Increase timeout, simplify request, queue for retry
     }
     catch (OpenCodeApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)

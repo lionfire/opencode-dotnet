@@ -3,6 +3,7 @@
 
 using LionFire.OpenCode.Serve;
 using LionFire.OpenCode.Serve.AgentFramework;
+using LionFire.OpenCode.Serve.Exceptions;
 using Microsoft.Extensions.AI;
 
 Console.WriteLine("LionFire.OpenCode.Serve - Agent Framework Example");
