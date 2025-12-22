@@ -9,17 +9,34 @@
 
     <!-- Package metadata -->
     <PackageId>LionFire.OpenCode.Serve.AgentFramework</PackageId>
-    <Version>0.1.0</Version>
+    <Version>1.0.0</Version>
     <Authors>LionFire</Authors>
-    <Description>Microsoft Agent Framework integration for LionFire.OpenCode.Serve SDK</Description>
-    <PackageTags>opencode;ai;coding;sdk;agent-framework;microsoft-agents</PackageTags>
+    <Company>LionFire</Company>
+    <Product>LionFire.OpenCode.Serve.AgentFramework</Product>
+    <Description>Microsoft.Extensions.AI IChatClient integration for LionFire.OpenCode.Serve SDK. Use OpenCode with Semantic Kernel and other Microsoft.Extensions.AI-compatible frameworks.</Description>
+    <PackageTags>opencode;ai;coding;sdk;agent-framework;microsoft-agents;ichatclient;semantic-kernel</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/lionfire/opencode-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/lionfire/opencode-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>See https://github.com/lionfire/opencode-dotnet/releases</PackageReleaseNotes>
+    <Copyright>Copyright (c) LionFire 2024-2025</Copyright>
+
+    <!-- Assembly info -->
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
 
     <!-- Enable XML documentation -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!-- SourceLink for debugging -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,11 +46,16 @@
   <ItemGroup>
     <!-- Microsoft Extensions AI (stable abstractions) -->
     <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.4.0-preview.1.25207.5" />
-    <!-- Microsoft Agent Framework (preview) -->
-    <!-- Note: These packages are in preview - version may need updating -->
-    <!--
-    <PackageReference Include="Microsoft.Agents.AI.Abstractions" Version="*-*" />
-    -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <None Include="../../icon.png" Pack="true" PackagePath="\" Condition="Exists('../../icon.png')" />
+  </ItemGroup>
+
+  <!-- SourceLink package -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
