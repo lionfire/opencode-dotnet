@@ -60,7 +60,7 @@ After publishing, you can verify the binary is AOT-compiled:
 
 ## Environment Variables
 
-- `OPENCODE_URL` - Set the OpenCode server URL (default: `http://localhost:46587`)
+- `OPENCODE_URL` - Set the OpenCode server URL (default: `http://localhost:9123`)
 
 ## Troubleshooting
 

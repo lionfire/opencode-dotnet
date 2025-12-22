@@ -57,7 +57,7 @@ Console.WriteLine();
 // Create client with options
 var clientOptions = new OpenCodeClientOptions
 {
-    BaseUrl = baseUrl ?? "http://localhost:9876",
+    BaseUrl = baseUrl ?? "http://localhost:9123",
     Directory = directory
 };
 

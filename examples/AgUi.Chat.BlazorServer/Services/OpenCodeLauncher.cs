@@ -15,7 +15,7 @@ public class OpenCodeLauncher : IDisposable
     public OpenCodeLauncher(ILogger<OpenCodeLauncher> logger, IConfiguration configuration)
     {
         _logger = logger;
-        _baseUrl = configuration["OpenCode:BaseUrl"] ?? "http://localhost:9876";
+        _baseUrl = configuration["OpenCode:BaseUrl"] ?? "http://localhost:9123";
     }
 
     /// <summary>

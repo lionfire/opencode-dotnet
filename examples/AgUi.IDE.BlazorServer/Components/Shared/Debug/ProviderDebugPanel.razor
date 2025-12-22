@@ -192,7 +192,7 @@
         try
         {
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetStringAsync("http://127.0.0.1:9876/provider/auth");
+            var response = await httpClient.GetStringAsync("http://127.0.0.1:9123/provider/auth");
             return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(response);
         }
         catch

@@ -74,7 +74,7 @@ builder.Services.AddScoped<OpenCodeChatService>();
 // Register OpenCode client for OpenCode mode
 builder.Services.AddOpenCodeClient(options =>
 {
-    options.BaseUrl = builder.Configuration["OpenCode:BaseUrl"] ?? "http://localhost:9876";
+    options.BaseUrl = builder.Configuration["OpenCode:BaseUrl"] ?? "http://localhost:9123";
 });
 
 // Register IChatService factory that returns the appropriate service based on mode

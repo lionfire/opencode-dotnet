@@ -29,7 +29,7 @@ builder.Services.Configure<IdeSettings>(builder.Configuration.GetSection("IDE"))
 // Register OpenCode client
 builder.Services.AddOpenCodeClient(options =>
 {
-    options.BaseUrl = builder.Configuration["OpenCode:BaseUrl"] ?? "http://localhost:9876";
+    options.BaseUrl = builder.Configuration["OpenCode:BaseUrl"] ?? "http://localhost:9123";
 });
 
 // Register IDE services

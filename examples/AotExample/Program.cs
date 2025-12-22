@@ -74,7 +74,7 @@ async Task DemonstrateApiCallsAsync()
     Console.WriteLine("   --------------------------------------------------");
 
     // Check if OPENCODE_URL environment variable is set
-    var baseUrl = Environment.GetEnvironmentVariable("OPENCODE_URL") ?? "http://localhost:46587";
+    var baseUrl = Environment.GetEnvironmentVariable("OPENCODE_URL") ?? "http://localhost:9123";
 
     try
     {

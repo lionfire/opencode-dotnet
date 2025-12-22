@@ -79,7 +79,7 @@ public class TerminalService
     public void InitializeWithSampleOutput()
     {
         AppendPrompt("$ opencode serve");
-        AppendSystem("Server started on http://localhost:9876");
+        AppendSystem("Server started on http://localhost:9123");
         AppendOutput("Ready for connections...");
         AppendPrompt("$");
     }
