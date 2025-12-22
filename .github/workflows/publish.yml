@@ -1,0 +1,77 @@
+name: Publish to NuGet
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (leave empty to use tag)'
+        required: false
+        type: string
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Determine version
+      id: version
+      run: |
+        if [ -n "${{ github.event.inputs.version }}" ]; then
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+        elif [ -n "${{ github.event.release.tag_name }}" ]; then
+          # Remove 'v' prefix if present
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        else
+          echo "version=1.0.0" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build
+
+    - name: Pack
+      run: |
+        dotnet pack src/LionFire.OpenCode.Serve/LionFire.OpenCode.Serve.csproj \
+          --configuration Release \
+          --no-build \
+          --output ./artifacts \
+          -p:PackageVersion=${{ steps.version.outputs.version }}
+
+        dotnet pack src/LionFire.OpenCode.Serve.AgentFramework/LionFire.OpenCode.Serve.AgentFramework.csproj \
+          --configuration Release \
+          --no-build \
+          --output ./artifacts \
+          -p:PackageVersion=${{ steps.version.outputs.version }}
+
+    - name: Push to NuGet
+      run: |
+        dotnet nuget push ./artifacts/*.nupkg \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --source https://api.nuget.org/v3/index.json \
+          --skip-duplicate
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./artifacts/*.nupkg

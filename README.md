@@ -426,9 +426,9 @@ services.AddOpenTelemetry()
 - **Specs:** 2
 - **Phases:** 4
 - **Epics:** 24
-- **Progress:** 3.8% (26/676 tasks)
-- **Greenlit:** 13
-- **Done:** 11
+- **Progress:** 92.3% (632/685 tasks)
+- **Greenlit:** 7
+- **Done:** 17
 - **Needs Attention:** 0
 
 
@@ -444,37 +444,37 @@ services.AddOpenTelemetry()
 
 | Phase | Name | Epics | Completion |
 |------:|:-----|------:|-----------:|
-| 1 | MVP Foundation | 6 | 6% |
-| 2 | Production Hardening | 6 | 0% |
-| 3 | Agent Framework Integration | 6 | 0% |
-| 4 | Polish and Release | 6 | 0% |
+| 1 | MVP Foundation | 6 | 100% |
+| 2 | Production Hardening | 6 | 96% |
+| 3 | Agent Framework Integration | 6 | 84% |
+| 4 | Polish and Release | 6 | 50% |
 
 
 ### Epics
 
 | Greenlit | Phase | Epic | Title | Tasks | Completion |
 |:--------:|------:|-----:|:------|------:|-----------:|
-| ✅ | 1 | 1 | Core Client Infrastructure | 0/190 | 0% |
-| ✅ | 1 | 2 | Session Management API | 0/115 | 0% |
-| ✅ | 1 | 3 | Message and Streaming API | 0/65 | 0% |
+| ✅ | 1 | 1 | Core Client Infrastructure | 190/190 | 100% |
+| ✅ | 1 | 2 | Session Management API | 115/115 | 100% |
+| ✅ | 1 | 3 | Message and Streaming API | 65/65 | 100% |
 | ✅ | 1 | 4 | File Operations, Permissions, and Command APIs | 26/26 | 100% |
-| ✅ | 1 | 5 | Error Handling and Logging | 0/40 | 0% |
-| ✅ | 1 | 6 | Testing and Examples | 0/37 | 0% |
-| ✅ | 2 | 1 | Source-Generated JSON and AOT | 0/6 | 0% |
-| ✅ | 2 | 2 | HttpClientFactory and Connection Management | 0/6 | 0% |
-| ✅ | 2 | 3 | Polly Resilience Integration | 0/8 | 0% |
-| ✅ | 2 | 4 | OpenTelemetry Observability | 0/8 | 0% |
-| ✅ | 2 | 5 | Advanced API Features | 0/7 | 0% |
-| ✅ | 2 | 6 | Performance Optimization | 0/9 | 0% |
-| ✅ | 3 | 1 | OpencodeAgent Core Implementation | 0/15 | 0% |
-| ✅ | 3 | 2 | Message Conversion Layer | 0/9 | 0% |
+| ✅ | 1 | 5 | Error Handling and Logging | 40/40 | 100% |
+| ✅ | 1 | 6 | Testing and Examples | 37/37 | 100% |
+| ✅ | 2 | 1 | Source-Generated JSON and AOT | 5/6 | 83% |
+| ✅ | 2 | 2 | HttpClientFactory and Connection Management | 10/10 | 100% |
+| ✅ | 2 | 3 | Polly Resilience Integration | 8/8 | 100% |
+| ✅ | 2 | 4 | OpenTelemetry Observability | 7/8 | 88% |
+| ✅ | 2 | 5 | Advanced API Features | 12/12 | 100% |
+| ✅ | 2 | 6 | Performance Optimization | 9/9 | 100% |
+| ✅ | 3 | 1 | OpencodeAgent Core Implementation | 15/15 | 100% |
+| ✅ | 3 | 2 | Message Conversion Layer | 9/9 | 100% |
 | ✅ | 3 | 3 | Thread Management and Serialization | 0/14 | 0% |
-| ✅ | 3 | 4 | Streaming Integration | 0/7 | 0% |
-| ✅ | 3 | 5 | DI Extensions and Builder Pattern | 0/17 | 0% |
-| ✅ | 3 | 6 | Testing and Examples | 0/23 | 0% |
-| ✅ | 4 | 1 | Documentation Suite | 0/12 | 0% |
-| ✅ | 4 | 2 | Example Projects | 0/13 | 0% |
-| ✅ | 4 | 3 | NuGet Packaging and Publishing | 0/12 | 0% |
+| ✅ | 3 | 4 | Streaming Integration | 7/7 | 100% |
+| ✅ | 3 | 5 | DI Extensions and Builder Pattern | 17/17 | 100% |
+| ✅ | 3 | 6 | Testing and Examples | 23/23 | 100% |
+| ✅ | 4 | 1 | Documentation Suite | 12/12 | 100% |
+| ✅ | 4 | 2 | Example Projects | 13/13 | 100% |
+| ✅ | 4 | 3 | NuGet Packaging and Publishing | 12/12 | 100% |
 | ✅ | 4 | 4 | Community Infrastructure | 0/13 | 0% |
 | ✅ | 4 | 5 | Security and Legal Review | 0/11 | 0% |
 | ✅ | 4 | 6 | Launch and Marketing | 0/13 | 0% |
